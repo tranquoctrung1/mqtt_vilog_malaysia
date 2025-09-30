@@ -14,6 +14,7 @@ namespace MQTT_Vilog_Malaysia.Models
         public double ReverseIndex { get; set; }
         public double ForwardFlow { get; set; }
         public double ReverseFlow { get; set; }
+        public double BatteryRemain { get; set; }
         public int Alarm { get; set; }
     }
 }

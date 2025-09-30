@@ -21,7 +21,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
             try
             {
-                LogKronheModel realtimeData = await analyzeDataAction.AnalyzeDataRealTimeHronheMeter(stringRealTime, time, siteid, location, imei);
+                LogKronheModel realtimeData = await analyzeDataAction.AnalyzeDataRealTimeHronheMeter(stringRealTime, time, siteid, location, imei, signal, battery);
                 List<LogKronheModel> logs = await analyzeDataAction.AnalyzeLogDataHronheMeter(Log);
 
                 List<ChannelConfigModel> channelConfig = await channelConfigAction.GetChannelByLoggerId(imei);
@@ -131,6 +131,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                 dataBattery.Value = battery;
                 dataBattery.TimeStamp = DateTime.Now.AddHours(7);
 
+                // battery capacity channel
+                DataLoggerModel dataBatteryCapacity = new DataLoggerModel();
+                dataBatteryCapacity.Value = Math.Round(realtimeData.BatteryRemain, 2);
+                dataBatteryCapacity.TimeStamp = DateTime.Now.AddHours(7);
+
                 // signal channel
                 DataLoggerModel dataSignal = new DataLoggerModel();
                 dataSignal.Value = signal;
@@ -141,6 +146,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 await channelConfigAction.UpdateValueAction($"{imei}_100", dataUpdateNetTotal);
                 await channelConfigAction.UpdateValueAction($"{imei}_101", dataUpdateAlarm);
                 await channelConfigAction.UpdateValueAction($"{imei}_05", dataBattery);
+                await channelConfigAction.UpdateValueAction($"{imei}_06", dataBatteryCapacity);
                 await channelConfigAction.UpdateValueAction($"{imei}_07", dataSignal);
 
 
@@ -148,6 +154,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                 List<DataLoggerModel> listInsertBateryChannel = new List<DataLoggerModel>();
                 listInsertBateryChannel.Add(dataBattery);
                 await dataLoggerAction.InsertDataLogger(listInsertBateryChannel, $"{imei}_05");
+
+                //insert data logger for battery capacity channel
+                List<DataLoggerModel> listInsertBateryCapacityChannel = new List<DataLoggerModel>();
+                listInsertBateryCapacityChannel.Add(dataBatteryCapacity);
+                await dataLoggerAction.InsertDataLogger(listInsertBateryCapacityChannel, $"{imei}_06");
 
                 //insert data logger for signal channel
                 List<DataLoggerModel> listInsertSignalChannel = new List<DataLoggerModel>();
@@ -209,17 +220,14 @@ namespace MQTT_Vilog_Malaysia.Actions
             try
             {
 
-                RealTimeModel real = await analyzeDataAction.AnalyzeDataRealTimeSUMeter(stringRealTime, siteid, location, imei);
+                RealTimeModel real = await analyzeDataAction.AnalyzeDataRealTimeSUMeter(stringRealTime, siteid, location, imei, signal, battery);
                 List<ChannelConfigModel> channel = await channelConfigAction.GetChannelByLoggerId(imei);
 
                 string channelForward = channel.Where(c => c.ForwardFlow == true).FirstOrDefault().ChannelId;
                 string channelReverse = channel.Where(c => c.ReverseFlow == true).FirstOrDefault().ChannelId;
 
-
-
                 if (real != null)
                 {
-
                     if (channelForward != "")
                     {
                         DataLoggerModel data = new DataLoggerModel();
@@ -493,10 +501,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     }
 
-
-
                 }
-
 
             }
             catch (Exception ex)

@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ namespace MQTT_Vilog_Malaysia.Actions
     {
         private bool disposed = false;
 
-        public async Task<LogKronheModel> AnalyzeDataRealTimeHronheMeter(string realTimeString, DateTime time, string siteid, string location, string loggerid)
+        public async Task<LogKronheModel> AnalyzeDataRealTimeHronheMeter(string realTimeString, DateTime time, string siteid, string location, string loggerid, int signal, double battery)
         {
             LogKronheModel log = new LogKronheModel();
             WriteLogAction writeLogAction = new WriteLogAction();
@@ -47,7 +49,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                     log.NetIndex = convertAction.ConvertHexToDouble(reg[1]);
                     log.ForwardIndex = convertAction.ConvertHexToDouble(reg[2]);
                     log.ReverseIndex = convertAction.ConvertHexToDouble(reg[3]);
-                    log.Alarm = Convert.ToInt32(reg[4], 16);
+                    log.BatteryRemain = convertAction.ConvertHexToDouble(reg[4]);
+                    log.Alarm = Convert.ToInt32(reg[5], 16);
                     if(log.Alarm > 0)
                     {
                         HistoryAlarmModel alarm = new HistoryAlarmModel();
@@ -91,6 +94,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                             alarm.Content = "Main power failure";
                             alarm.Type = 15;
                         }
+                        
 
                         using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                         {
@@ -105,7 +109,6 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     double diff = (alarm.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
                                     if (diff > 60)
                                     {
-
                                         isInsertAlarm = true;
                                     }
                                 }
@@ -133,6 +136,120 @@ namespace MQTT_Vilog_Malaysia.Actions
                     
                 }
 
+                // insert alarm for battery 
+                if(battery <= 3.5)
+                {
+                    HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
+                    alarmBattery.SiteId = siteid;
+                    alarmBattery.Location = location;
+                    alarmBattery.LoggerId = loggerid;
+                    alarmBattery.ChannelId = $"{loggerid}_05";
+                    alarmBattery.ChannelName = "7. Battery logger";
+                    alarmBattery.Content = "";
+                    alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(7);
+                    alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(7);
+
+                    if (battery >= 3.4)
+                    {
+                        alarmBattery.Content = "Lower battery";
+                        alarmBattery.Type = 16;
+                    }
+                    else
+                    {
+                        alarmBattery.Content = "Out of battery";
+                        alarmBattery.Type = 17;
+                    }
+
+                    using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
+                    {
+                        HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmBattery.SiteId);
+
+                        bool isInsertAlarm = false;
+
+                        if (his != null)
+                        {
+                            if (his.TimeStampAlarm != null)
+                            {
+                                double diff = (alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                if (diff > 60)
+                                {
+                                    isInsertAlarm = true;
+                                }
+                            }
+                            else
+                            {
+                                isInsertAlarm = true;
+
+                            }
+                        }
+                        else
+                        {
+                            isInsertAlarm = true;
+
+                        }
+
+                        if (isInsertAlarm)
+                        {
+                            alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                            alarmBattery.TimeStampHasValue = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                            historyAlarmAction.InsertAlarm(alarmBattery);
+                        }
+
+                    }
+                }
+
+                // insert alarm for signal
+                if (signal < 20)
+                {
+                    HistoryAlarmModel alarmSignal = new HistoryAlarmModel();
+                    alarmSignal.SiteId = siteid;
+                    alarmSignal.Location = location;
+                    alarmSignal.LoggerId = loggerid;
+                    alarmSignal.ChannelId = $"{loggerid}_07";
+                    alarmSignal.ChannelName = "9. Signal";
+                    alarmSignal.Content = "Lower signal";
+                    alarmSignal.TimeStampHasValue = DateTime.Now.AddHours(7);
+                    alarmSignal.TimeStampAlarm = DateTime.Now.AddHours(7);
+                    alarmSignal.Type = 18;
+                    
+
+                    using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
+                    {
+                        HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmSignal.SiteId);
+
+                        bool isInsertAlarm = false;
+
+                        if (his != null)
+                        {
+                            if (his.TimeStampAlarm != null)
+                            {
+                                double diff = (alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                if (diff > 60)
+                                {
+                                    isInsertAlarm = true;
+                                }
+                            }
+                            else
+                            {
+                                isInsertAlarm = true;
+
+                            }
+                        }
+                        else
+                        {
+                            isInsertAlarm = true;
+
+                        }
+
+                        if (isInsertAlarm)
+                        {
+                            alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                            alarmSignal.TimeStampHasValue = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                            historyAlarmAction.InsertAlarm(alarmSignal);
+                        }
+
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -184,7 +301,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                         log.NetIndex = convertAction.ConvertHexToDouble(reg[1]);
                         log.ForwardIndex = convertAction.ConvertHexToDouble(reg[2]);
                         log.ReverseIndex = convertAction.ConvertHexToDouble(reg[3]);
-                        log.Alarm = Convert.ToInt32(reg[4], 16);
+                        log.BatteryRemain = convertAction.ConvertHexToDouble(reg[4]);
+                        log.Alarm = Convert.ToInt32(reg[5], 16);
                     }
 
                     list.Add(log);
@@ -198,7 +316,7 @@ namespace MQTT_Vilog_Malaysia.Actions
             return list;
         }
 
-        public async Task<RealTimeModel> AnalyzeDataRealTimeSUMeter(string realTimeString, string siteid, string location, string loggerid)
+        public async Task<RealTimeModel> AnalyzeDataRealTimeSUMeter(string realTimeString, string siteid, string location, string loggerid, int signal, double battery)
         {
             RealTimeModel el = new RealTimeModel();
 
@@ -224,7 +342,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     int flowRateReg = 0;
                     double flowRate = 0;
 
-                    int status = int.Parse(reg[reg.Count - 1]);
+                    int status = Convert.ToInt32(reg[reg.Count -1], 16);
 
                     string s = Convert.ToString(status, 2); //Convert to binary in a string
 
@@ -334,7 +452,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                         content = "Modbus power supply down";
                         channelId = $"{loggerid}_100";
                         channelName = "1.1 Power Supply Down";
-                        type = 16;
+                        type = 19;
 
                     }
                     else if (el.MemoryError > 0)
@@ -342,42 +460,42 @@ namespace MQTT_Vilog_Malaysia.Actions
                         content = "Memory error";
                         channelId = $"{loggerid}_101";
                         channelName = "1.2 Mem error";
-                        type = 17;
+                        type = 20;
                     }
                     else if (el.LowTransmitterVoltage > 0)
                     {
                         content = "Low trasmitter voltage";
                         channelId = $"{loggerid}_103";
                         channelName = "1.3 Low Transmitter voltage";
-                        type = 18;
+                        type = 21;
                     }
                     else if (el.ReverseFlowWarning > 0)
                     {
                         content = "Reverse flow waring";
                         channelId = $"{loggerid}_104";
                         channelName = "1.4 Reverse Flow warning";
-                        type = 19;
+                        type = 22;
                     }
                     else if (el.DryingWarning > 0)
                     {
                         content = "Drying waring";
                         channelId = $"{loggerid}_105";
                         channelName = "1.5 Drying warning";
-                        type = 20;
+                        type = 23;
                     }
                     else if(el.LowFlowMeterVoltage > 0)
                     {
                         content = "Low flow meter voltage";
                         channelId = $"{loggerid}_106";
                         channelName = "1.6 Low Flow Meter warning";
-                        type = 21;
+                        type = 24;
                     }
                     else if(el.CommunicationError > 0)
                     {
                         content = "Comunication error";
                         channelId = $"{loggerid}_107";
                         channelName = "1.7 Com error";
-                        type = 22;
+                        type = 25;
                     }
 
                     if (content != "") {
@@ -428,6 +546,121 @@ namespace MQTT_Vilog_Malaysia.Actions
                                 alarm.TimeStampHasValue = alarm.TimeStampAlarm.Value.AddHours(7);
                                 historyAlarmAction.InsertAlarm(alarm);
                             }
+                        }
+                    }
+
+                    // insert alarm for battery 
+                    if (battery <= 3.5)
+                    {
+                        HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
+                        alarmBattery.SiteId = siteid;
+                        alarmBattery.Location = location;
+                        alarmBattery.LoggerId = loggerid;
+                        alarmBattery.ChannelId = $"{loggerid}_05";
+                        alarmBattery.ChannelName = "7. Battery logger";
+                        alarmBattery.Content = "";
+                        alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(7);
+                        alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(7);
+
+                        if (battery >= 3.4)
+                        {
+                            alarmBattery.Content = "Lower battery";
+                            alarmBattery.Type = 26;
+                        }
+                        else
+                        {
+                            alarmBattery.Content = "Out of battery";
+                            alarmBattery.Type = 27;
+                        }
+
+                        using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
+                        {
+                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmBattery.SiteId);
+
+                            bool isInsertAlarm = false;
+
+                            if (his != null)
+                            {
+                                if (his.TimeStampAlarm != null)
+                                {
+                                    double diff = (alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                    if (diff > 60)
+                                    {
+                                        isInsertAlarm = true;
+                                    }
+                                }
+                                else
+                                {
+                                    isInsertAlarm = true;
+
+                                }
+                            }
+                            else
+                            {
+                                isInsertAlarm = true;
+
+                            }
+
+                            if (isInsertAlarm)
+                            {
+                                alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                                alarmBattery.TimeStampHasValue = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                                historyAlarmAction.InsertAlarm(alarmBattery);
+                            }
+
+                        }
+                    }
+
+                    // insert alarm for signal
+                    if (signal < 20)
+                    {
+                        HistoryAlarmModel alarmSignal = new HistoryAlarmModel();
+                        alarmSignal.SiteId = siteid;
+                        alarmSignal.Location = location;
+                        alarmSignal.LoggerId = loggerid;
+                        alarmSignal.ChannelId = $"{loggerid}_07";
+                        alarmSignal.ChannelName = "9. Signal";
+                        alarmSignal.Content = "Lower signal";
+                        alarmSignal.TimeStampHasValue = DateTime.Now.AddHours(7);
+                        alarmSignal.TimeStampAlarm = DateTime.Now.AddHours(7);
+                        alarmSignal.Type = 28;
+
+
+                        using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
+                        {
+                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmSignal.SiteId);
+
+                            bool isInsertAlarm = false;
+
+                            if (his != null)
+                            {
+                                if (his.TimeStampAlarm != null)
+                                {
+                                    double diff = (alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                    if (diff > 60)
+                                    {
+                                        isInsertAlarm = true;
+                                    }
+                                }
+                                else
+                                {
+                                    isInsertAlarm = true;
+
+                                }
+                            }
+                            else
+                            {
+                                isInsertAlarm = true;
+
+                            }
+
+                            if (isInsertAlarm)
+                            {
+                                alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                                alarmSignal.TimeStampHasValue = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                                historyAlarmAction.InsertAlarm(alarmSignal);
+                            }
+
                         }
                     }
                 }

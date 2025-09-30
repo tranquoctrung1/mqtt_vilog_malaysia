@@ -38,3 +38,4 @@ D:\project\MQTT_Vilog_Malaysia\MQTT_Vilog_Malaysia\obj\Debug\net8.0\refint\MQTT_
 D:\project\MQTT_Vilog_Malaysia\MQTT_Vilog_Malaysia\obj\Debug\net8.0\MQTT_Vilog_Malaysia.pdb
 D:\project\MQTT_Vilog_Malaysia\MQTT_Vilog_Malaysia\obj\Debug\net8.0\MQTT_Vilog_Malaysia.genruntimeconfig.cache
 D:\project\MQTT_Vilog_Malaysia\MQTT_Vilog_Malaysia\obj\Debug\net8.0\ref\MQTT_Vilog_Malaysia.dll
+D:\project\MQTT_Vilog_Malaysia\MQTT_Vilog_Malaysia\obj\Debug\net8.0\MQTT_Vilog_Malaysia.sourcelink.json

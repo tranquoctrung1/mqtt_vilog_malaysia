@@ -515,21 +515,21 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                         listChannels.Add(battery);
 
 
-                                                        ChannelConfigModel remain = new ChannelConfigModel();
-                                                        remain.ChannelId = $"{loggerid}_06";
-                                                        remain.ChannelName = "8. Battery metter remain";
-                                                        remain.LoggerId = loggerid;
-                                                        remain.Unit = "%";
-                                                        remain.ForwardFlow = false;
-                                                        remain.ReverseFlow = false;
-                                                        remain.Pressure1 = false;
-                                                        remain.Pressure2 = false;
-                                                        remain.TimeStamp = null;
-                                                        remain.LastValue = null;
-                                                        remain.IndexTimeStamp = null;
-                                                        remain.LastIndex = null;
+                                                        ChannelConfigModel capacity = new ChannelConfigModel();
+                                                        capacity.ChannelId = $"{loggerid}_06";
+                                                        capacity.ChannelName = "8. Battery capacity";
+                                                        capacity.LoggerId = loggerid;
+                                                        capacity.Unit = "V";
+                                                        capacity.ForwardFlow = false;
+                                                        capacity.ReverseFlow = false;
+                                                        capacity.Pressure1 = false;
+                                                        capacity.Pressure2 = false;
+                                                        capacity.TimeStamp = null;
+                                                        capacity.LastValue = null;
+                                                        capacity.IndexTimeStamp = null;
+                                                        capacity.LastIndex = null;
 
-                                                        listChannels.Add(remain);
+                                                        listChannels.Add(capacity);
 
                                                         ChannelConfigModel signal = new ChannelConfigModel();
                                                         signal.ChannelId = $"{loggerid}_07";
