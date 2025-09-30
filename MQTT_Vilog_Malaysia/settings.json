@@ -1,0 +1,10 @@
+{
+  "Settings": {
+    "Host": "mongodb://127.0.0.1:27017/",
+    "DBName": "vilog_malaysia",
+    "IpMQTT": "vilog.viwater.vn",
+    "Port": "1883",
+    "IpCheck": "http://157.66.81.22:3005/api"
+  }
+
+}
