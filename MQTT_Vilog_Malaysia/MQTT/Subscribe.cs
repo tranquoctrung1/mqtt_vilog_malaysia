@@ -40,15 +40,15 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                             string topic = e.ApplicationMessage.Topic;
 
-                            if (topic.ToLower().Contains("vilog"))
+                            if (topic.ToLower().Contains("vilog_"))
                             {
                                 string[] splitTopic = topic.Split(new char[] { '_' }, StringSplitOptions.None);
 
                                 if (splitTopic.Length == 4 && splitTopic[0].ToLower() == "vilog")
                                 {
                                     // handle insert site and channel
-                                    string loggerid = splitTopic[1];
-                                    string location = splitTopic[2];
+                                    string loggerid = splitTopic[2];
+                                    string location = splitTopic[1];
 
                                     string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
@@ -67,9 +67,9 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                             {
                                                 string url = $"{ipcheck}";
 
-                                                bool check = await checkImeiAvailableAction.CheckImeiAvailable(dataObjects.IMEI, url);
+                                                int check = await checkImeiAvailableAction.CheckImeiAvailable(dataObjects.IMEI, url);
 
-                                                if (check == true)
+                                                if (check == 1)
                                                 {
                                                     if (dataObjects.Payload.Length > 50)
                                                     {
@@ -578,7 +578,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                     }
 
                                                 }
-                                                else
+                                                else if(check == 2)
                                                 {
                                                     using (SiteAction siteAction = new SiteAction())
                                                     {

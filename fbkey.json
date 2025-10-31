@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "iviwater-malaysia",
+  "private_key_id": "4f209a0532219eb28e77636033635c6279cd4dc8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC061F2BlU4P5Y7\nurnHNN2WxXEzghIZwcff7Kiojt1L0Wbi2BpZ6edvH/58rKI1HcclABCK1SCzxJLI\nnIV33Wlb6eehVbj1Uqnge69t2djRvdt4U/9b36VnptRXURnJnYrfLp7FMXVsapME\nPUU6NC4CK4KN4hXSmt4sTdD7NkQO9t1pw3PeWuROJNRIxmM0Ngxc6+f5WK/G9bRt\nZxVE5jl0jE9WgQ6t+c7q7VchB78BixBz2evdh6YxiC7CtbWuUtoK3itOo4Z55NNW\naugd/wPIi0TVLOVpTz6Qtck/lUCWfSna+mzKRwPU9HZJdG2LTnN+1GoMxgoqVCTE\nnyUIAngPAgMBAAECggEAL3xiVcGkxY4/Du9cSrKQBL5PD49w08zeeuJBhHh3Eirk\nv96rz/TKV4sEv1GKg7mMpyQEs4PsQPLz+e7HQ2ZcfJEAyIJY+R8Y0oB0U7dtpuOX\nwtX9PO6PGg0aR87UH2yX4it45dYs9WdlriOs03GVr+Ees8HnK2+Vp/hGxWEBbRGi\nJZP/ebsFD9mjaWpfOrhva99yYywHXWfcMXX6BeruYsuKbIuIcsxXgsXAFUZmzw1j\nLT1LKW+yFJNnW8j+i5yOQZV7kX1nlefY64Jit0AGReOZihqzsJ9+udIAg+ZBZh2v\nSI7VJ3TZI2G6ebhtuXKOB1dg0KRFFzHZho3Oh4o4MQKBgQDsQGB5Zvu1AoQrWvLO\nlAVBpUR3ZvjCt/S8W5gaSeNWFwaUCO0rVvBSA5DSCMAWE0G62spiZjbUypSKs5MP\nAeWtmTBS/bONrIPLdAQx3ZDrgzNvoCzIGtyU0Njc0Ju7iO1X+5rqowzH+UD51m45\n6cyIE+rmWrxrYNutAjPPDycB/wKBgQDECt4584kzb0aDXW7Yw3eIicI1l0mDNVZq\nPDxb52O1a3+B7hXTmrXnU4XhW6kKsbJ7k3FppsciC8RxNeQxKvSPnGr38vwsohRh\nqEQTwYRBH9lGFlEV2lrUxRVUlQhO9RBny2JewEc9WbhTNfxC0+NF+KV0bQETBO0/\nNSpOS4hp8QKBgAp43A3lk7i1UNh/Io4nn4gGZF+Kj/JJpy6GPNrFda9GPANp1eF6\n7BImmE/HFYSk+9/lfN0ZvMp35Fe1mAotQloMlUjIeCIKiJkHHnx7XsYhvbDv/6wr\nDKYID+TR1mVcr3Cb9YT7D0D5+nhYmfA1Pdy2TU5CrWFxHKuxkkxWVptPAoGAAUxZ\nIGUeeXq5KtGJlGHm/r56zMQNtpK52cZAWBN2M5Ncqs2a02Xo4nlJH67ttaZrminl\nzF9QXkdZq65BrpmsOO8+Phob1WfVXrgwizjy2UOOusoXC2AAzfvoIkFCZtN0oltU\ncXAwiJV5hQOMghzJGoOFBPpb0XZs48hEWXRimOECgYBEzElnjOmdS2lJ60IylPID\nuk02Wit7JUlDySJ+bY8XW9YaO1B6grs/ILs4+SJwEwDHJ8pqIVqRDnFkdz1hmL7E\n/XFLDFcLWDpopBqcRk/4An67tzcx9igTUHNbCpuaVFXQHvLlG/8FWLhJlEdiqtHe\nyHebE323Lc4W1yp7Ku3AGw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@iviwater-malaysia.iam.gserviceaccount.com",
+  "client_id": "109417583264995231699",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40iviwater-malaysia.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
