@@ -14,10 +14,10 @@ namespace MQTT_Vilog_Malaysia.Actions
 {
     public class CheckImeiAvailableAction: IDisposable
     {
-        public async Task<bool> CheckImeiAvailable(string imei, string url)
+        public async Task<int> CheckImeiAvailable(string imei, string url)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
-            bool check = false;
+            int  check = 0;
 
             try
             {
@@ -32,13 +32,23 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     var docs = JsonSerializer.Deserialize<ImeiModel>(json,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                    if(docs.Imei != "")
+                    if(docs != null) 
                     {
-                        if (docs.Use == false)
+                        if (docs.Imei != "")
                         {
-                            check = true;
+                            if (docs.Use == false)
+                            {
+                                check = 1;
+                            }
+                            else
+                            {
+                                check = 2;
+                            }
                         }
+                    }
+                    else
+                    {
+                        check = 0;
                     }
                     
                 }

@@ -21,6 +21,7 @@ namespace MQTT_Vilog_Malaysia.Actions
             WriteLogAction writeLogAction = new WriteLogAction();
             ConvertHexToDoubleAction convertAction = new ConvertHexToDoubleAction();
 
+
             try
             {
                 List<string> reg = new List<string>();
@@ -107,7 +108,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                                 if (his.TimeStampAlarm != null)
                                 {
                                     double diff = (alarm.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
-                                    if (diff > 60)
+                                    //if (diff > 60)
+                                    //{
+                                    //    isInsertAlarm = true;
+                                    //}
+                                    if(his.Type != alarm.Type)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -126,9 +131,24 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(7);
-                                alarm.TimeStampHasValue = alarm.TimeStampAlarm.Value.AddHours(7);
+                                //alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(7);
+                                //alarm.TimeStampHasValue = alarm.TimeStampHasValue.Value.AddHours(7);
                                 historyAlarmAction.InsertAlarm(alarm);
+
+                                // push notification
+                                using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
+                                {
+                                    List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                                    if (listToken.Count > 0)
+                                    {
+                                        using (NotificationAction notificationAction = new NotificationAction())
+                                        {
+                                            string contentPush = $"Channel {alarm.ChannelName} with value: {log.Alarm} is {alarm.Content}";
+
+                                            await notificationAction.SubmitNotification(alarm.Location, alarm.Location, contentPush, listToken);
+                                        }
+                                    }
+                                }
                             }
 
                         }
@@ -170,8 +190,12 @@ namespace MQTT_Vilog_Malaysia.Actions
                         {
                             if (his.TimeStampAlarm != null)
                             {
-                                double diff = (alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
-                                if (diff > 60)
+                                //double diff = (alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                //if (diff > 60)
+                                //{
+                                //    isInsertAlarm = true;
+                                //}
+                                if (his.Type != alarmBattery.Type)
                                 {
                                     isInsertAlarm = true;
                                 }
@@ -190,9 +214,23 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         if (isInsertAlarm)
                         {
-                            alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
-                            alarmBattery.TimeStampHasValue = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                            //alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                            //alarmBattery.TimeStampHasValue = alarmBattery.TimeStampHasValue.Value.AddHours(7);
                             historyAlarmAction.InsertAlarm(alarmBattery);
+
+                            // push notification
+                            using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
+                            {
+                                List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                                if (listToken.Count > 0)
+                                {
+                                    using (NotificationAction notificationAction = new NotificationAction())
+                                    {
+                                        string contentPush = $"Channel {alarmBattery.ChannelName} with value: {battery} is {alarmBattery.Content}";
+                                        await notificationAction.SubmitNotification(alarmBattery.Location, alarmBattery.Location, alarmBattery.Content, listToken);
+                                    }
+                                }
+                            }
                         }
 
                     }
@@ -223,8 +261,13 @@ namespace MQTT_Vilog_Malaysia.Actions
                         {
                             if (his.TimeStampAlarm != null)
                             {
-                                double diff = (alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
-                                if (diff > 60)
+                                //double diff = (alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                //if (diff > 60)
+                                //{
+                                //    isInsertAlarm = true;
+                                //}
+
+                                if (his.Type != alarmSignal.Type)
                                 {
                                     isInsertAlarm = true;
                                 }
@@ -243,9 +286,23 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         if (isInsertAlarm)
                         {
-                            alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
-                            alarmSignal.TimeStampHasValue = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                            //alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                            //alarmSignal.TimeStampHasValue = alarmSignal.TimeStampHasValue.Value.AddHours(7);
                             historyAlarmAction.InsertAlarm(alarmSignal);
+
+                            // push notification
+                            using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
+                            {
+                                List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                                if (listToken.Count > 0)
+                                {
+                                    using (NotificationAction notificationAction = new NotificationAction())
+                                    {
+                                        string contentPush = $"Channel {alarmSignal.ChannelName} with value: {signal} is {alarmSignal.Content}";
+                                        await notificationAction.SubmitNotification(alarmSignal.Location, alarmSignal.Location , contentPush, listToken);
+                                    }
+                                }
+                            }
                         }
 
                     }
@@ -521,12 +578,12 @@ namespace MQTT_Vilog_Malaysia.Actions
                             {
                                 if (his.TimeStampAlarm != null)
                                 {
-                                    double diff = (alarm.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
-                                    if (diff > 60)
+                                   
+                                    if(his.Type != alarm.Type)
                                     {
-                                       
                                         isInsertAlarm = true;
                                     }
+                                    
                                 }
                                 else
                                 {
@@ -543,8 +600,20 @@ namespace MQTT_Vilog_Malaysia.Actions
                             if (isInsertAlarm)
                             {
                                 alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(7);
-                                alarm.TimeStampHasValue = alarm.TimeStampAlarm.Value.AddHours(7);
+                                alarm.TimeStampHasValue = alarm.TimeStampHasValue.Value.AddHours(7);
                                 historyAlarmAction.InsertAlarm(alarm);
+
+                                // push notification
+                                using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction()) {
+                                    List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                                    if(listToken.Count > 0)
+                                    {
+                                        using (NotificationAction notificationAction = new NotificationAction()) {
+                                            string contentPush = $"Channel {alarm.ChannelName}  is {alarm.Content}";
+                                            await notificationAction.SubmitNotification(alarm.Location, alarm.Location, contentPush, listToken);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -583,8 +652,12 @@ namespace MQTT_Vilog_Malaysia.Actions
                             {
                                 if (his.TimeStampAlarm != null)
                                 {
-                                    double diff = (alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
-                                    if (diff > 60)
+                                    //double diff = (alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                    //if (diff > 60)
+                                    //{
+                                    //    isInsertAlarm = true;
+                                    //}
+                                    if(his.Type != alarmBattery.Type)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -603,9 +676,23 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
-                                alarmBattery.TimeStampHasValue = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                                //alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
+                                //alarmBattery.TimeStampHasValue = alarmBattery.TimeStampHasValue.Value.AddHours(7);
                                 historyAlarmAction.InsertAlarm(alarmBattery);
+
+                                // push notification
+                                using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
+                                {
+                                    List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                                    if (listToken.Count > 0)
+                                    {
+                                        using (NotificationAction notificationAction = new NotificationAction())
+                                        {
+                                            string contentPush = $"Channel {alarmBattery.ChannelName} with value: {battery} is {alarmBattery.Content}";
+                                            await notificationAction.SubmitNotification(alarmBattery.Location, alarmBattery.Location, contentPush, listToken);
+                                        }
+                                    }
+                                }
                             }
 
                         }
@@ -636,8 +723,13 @@ namespace MQTT_Vilog_Malaysia.Actions
                             {
                                 if (his.TimeStampAlarm != null)
                                 {
-                                    double diff = (alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
-                                    if (diff > 60)
+                                    //double diff = (alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes;
+                                    //if (diff > 60)
+                                    //{
+                                    //    isInsertAlarm = true;
+                                    //}
+
+                                    if (his.Type != alarmSignal.Type)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -656,9 +748,23 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
-                                alarmSignal.TimeStampHasValue = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                                //alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
+                                //alarmSignal.TimeStampHasValue = alarmSignal.TimeStampHasValue.Value.AddHours(7);
                                 historyAlarmAction.InsertAlarm(alarmSignal);
+
+                                // push notification
+                                using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
+                                {
+                                    List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                                    if (listToken.Count > 0)
+                                    {
+                                        using (NotificationAction notificationAction = new NotificationAction())
+                                        {
+                                            string contentPush = $"Channel {alarmSignal.ChannelName} with value: {signal} is {alarmSignal.Content}";
+                                            await notificationAction.SubmitNotification(alarmSignal.Location, alarmSignal.Location, contentPush, listToken);
+                                        }
+                                    }
+                                }
                             }
 
                         }
