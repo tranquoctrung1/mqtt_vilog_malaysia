@@ -61,28 +61,28 @@ namespace MQTT_Vilog_Malaysia.Actions
                         alarm.ChannelId = $"{loggerid}_101";
                         alarm.ChannelName = "6. Alarm";
                         alarm.Content = "";
-                        alarm.TimeStampHasValue = DateTime.Now.AddHours(7);
-                        alarm.TimeStampAlarm = DateTime.Now.AddHours(7);
+                        alarm.TimeStampHasValue = DateTime.Now.AddHours(8);
+                        alarm.TimeStampAlarm = DateTime.Now.AddHours(8);
                         
 
                         if (log.Alarm == 1)
                         {
-                            alarm.Content = "Active flow meansurement warning condition";
+                            alarm.Content = "Active Flow Meansurement Warning Condition";
                             alarm.Type = 10;
                         }
                         else if (log.Alarm == 2)
                         {
-                            alarm.Content = "Active < 10% battery warning condition";
+                            alarm.Content = "Active < 10% Battery Warning Condition";
                             alarm.Type = 11;
                         }
                         else if (log.Alarm == 4)
                         {
-                            alarm.Content = "Active EEPROM error condition";
+                            alarm.Content = "Active EEPROM Error Condition";
                             alarm.Type = 12;
                         }
                         else if (log.Alarm == 8)
                         {
-                            alarm.Content = "Active communication error condition";
+                            alarm.Content = "Active Communication Error Condition";
                             alarm.Type = 13;
                         }
                         else if (log.Alarm == 16)
@@ -92,7 +92,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                         }
                         else if (log.Alarm == 32)
                         {
-                            alarm.Content = "Main power failure";
+                            alarm.Content = "Main Power Failure";
                             alarm.Type = 15;
                         }
                         
@@ -131,8 +131,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                //alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(7);
-                                //alarm.TimeStampHasValue = alarm.TimeStampHasValue.Value.AddHours(7);
+                                //alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(8);
+                                //alarm.TimeStampHasValue = alarm.TimeStampHasValue.Value.AddHours(8);
                                 historyAlarmAction.InsertAlarm(alarm);
 
                                 // push notification
@@ -164,19 +164,19 @@ namespace MQTT_Vilog_Malaysia.Actions
                     alarmBattery.Location = location;
                     alarmBattery.LoggerId = loggerid;
                     alarmBattery.ChannelId = $"{loggerid}_05";
-                    alarmBattery.ChannelName = "7. Battery logger";
+                    alarmBattery.ChannelName = "7. Battery Logger";
                     alarmBattery.Content = "";
-                    alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(7);
-                    alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(7);
+                    alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(8);
+                    alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(8);
 
                     if (battery >= 3.4)
                     {
-                        alarmBattery.Content = "Lower battery";
+                        alarmBattery.Content = "Low battery";
                         alarmBattery.Type = 16;
                     }
                     else
                     {
-                        alarmBattery.Content = "Out of battery";
+                        alarmBattery.Content = "Out Of Battery";
                         alarmBattery.Type = 17;
                     }
 
@@ -214,8 +214,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         if (isInsertAlarm)
                         {
-                            //alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
-                            //alarmBattery.TimeStampHasValue = alarmBattery.TimeStampHasValue.Value.AddHours(7);
+                            //alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(8);
+                            //alarmBattery.TimeStampHasValue = alarmBattery.TimeStampHasValue.Value.AddHours(8);
                             historyAlarmAction.InsertAlarm(alarmBattery);
 
                             // push notification
@@ -245,9 +245,9 @@ namespace MQTT_Vilog_Malaysia.Actions
                     alarmSignal.LoggerId = loggerid;
                     alarmSignal.ChannelId = $"{loggerid}_07";
                     alarmSignal.ChannelName = "9. Signal";
-                    alarmSignal.Content = "Lower signal";
-                    alarmSignal.TimeStampHasValue = DateTime.Now.AddHours(7);
-                    alarmSignal.TimeStampAlarm = DateTime.Now.AddHours(7);
+                    alarmSignal.Content = "Low signal";
+                    alarmSignal.TimeStampHasValue = DateTime.Now.AddHours(8);
+                    alarmSignal.TimeStampAlarm = DateTime.Now.AddHours(8);
                     alarmSignal.Type = 18;
                     
 
@@ -286,8 +286,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         if (isInsertAlarm)
                         {
-                            //alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
-                            //alarmSignal.TimeStampHasValue = alarmSignal.TimeStampHasValue.Value.AddHours(7);
+                            //alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(8);
+                            //alarmSignal.TimeStampHasValue = alarmSignal.TimeStampHasValue.Value.AddHours(8);
                             historyAlarmAction.InsertAlarm(alarmSignal);
 
                             // push notification
@@ -335,7 +335,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                         reg.Add(data[0].Substring(i, 8));
                     }
                     DateTime time = DateTime.Parse(data[1]).ToUniversalTime();
-                    //time = time.AddHours(7);
+                    time = time.AddHours(8);
 
                     LogKronheModel log = new LogKronheModel();
 
@@ -506,7 +506,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     if (el.ModbusPowerSupplyDown > 0)
                     {
-                        content = "Modbus power supply down";
+                        content = "Modbus Power Supply Down";
                         channelId = $"{loggerid}_100";
                         channelName = "1.1 Power Supply Down";
                         type = 19;
@@ -514,44 +514,44 @@ namespace MQTT_Vilog_Malaysia.Actions
                     }
                     else if (el.MemoryError > 0)
                     {
-                        content = "Memory error";
+                        content = "Memory Error";
                         channelId = $"{loggerid}_101";
-                        channelName = "1.2 Mem error";
+                        channelName = "1.2 Memmory Error";
                         type = 20;
                     }
                     else if (el.LowTransmitterVoltage > 0)
                     {
-                        content = "Low trasmitter voltage";
+                        content = "Low Trasmitter Voltage";
                         channelId = $"{loggerid}_103";
-                        channelName = "1.3 Low Transmitter voltage";
+                        channelName = "1.3 Low Transmitter Voltage";
                         type = 21;
                     }
                     else if (el.ReverseFlowWarning > 0)
                     {
-                        content = "Reverse flow waring";
+                        content = "Reverse Flow Warning";
                         channelId = $"{loggerid}_104";
-                        channelName = "1.4 Reverse Flow warning";
+                        channelName = "1.4 Reverse Flow Warning";
                         type = 22;
                     }
                     else if (el.DryingWarning > 0)
                     {
-                        content = "Drying waring";
+                        content = "Drying Warning";
                         channelId = $"{loggerid}_105";
-                        channelName = "1.5 Drying warning";
+                        channelName = "1.5 Drying Warning";
                         type = 23;
                     }
                     else if(el.LowFlowMeterVoltage > 0)
                     {
-                        content = "Low flow meter voltage";
+                        content = "Low Flow Meter Voltage";
                         channelId = $"{loggerid}_106";
-                        channelName = "1.6 Low Flow Meter warning";
+                        channelName = "1.6 Low Flow Meter Warning";
                         type = 24;
                     }
                     else if(el.CommunicationError > 0)
                     {
-                        content = "Comunication error";
+                        content = "Comunication Error";
                         channelId = $"{loggerid}_107";
-                        channelName = "1.7 Com error";
+                        channelName = "1.7 Comms Error";
                         type = 25;
                     }
 
@@ -599,8 +599,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(7);
-                                alarm.TimeStampHasValue = alarm.TimeStampHasValue.Value.AddHours(7);
+                                alarm.TimeStampAlarm = alarm.TimeStampAlarm.Value.AddHours(8);
+                                alarm.TimeStampHasValue = alarm.TimeStampHasValue.Value.AddHours(8);
                                 historyAlarmAction.InsertAlarm(alarm);
 
                                 // push notification
@@ -626,19 +626,19 @@ namespace MQTT_Vilog_Malaysia.Actions
                         alarmBattery.Location = location;
                         alarmBattery.LoggerId = loggerid;
                         alarmBattery.ChannelId = $"{loggerid}_05";
-                        alarmBattery.ChannelName = "7. Battery logger";
+                        alarmBattery.ChannelName = "7. Battery Logger";
                         alarmBattery.Content = "";
-                        alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(7);
-                        alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(7);
+                        alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(8);
+                        alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(8);
 
                         if (battery >= 3.4)
                         {
-                            alarmBattery.Content = "Lower battery";
+                            alarmBattery.Content = "Low Battery";
                             alarmBattery.Type = 26;
                         }
                         else
                         {
-                            alarmBattery.Content = "Out of battery";
+                            alarmBattery.Content = "Out Of Battery";
                             alarmBattery.Type = 27;
                         }
 
@@ -676,8 +676,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                //alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(7);
-                                //alarmBattery.TimeStampHasValue = alarmBattery.TimeStampHasValue.Value.AddHours(7);
+                                //alarmBattery.TimeStampAlarm = alarmBattery.TimeStampAlarm.Value.AddHours(8);
+                                //alarmBattery.TimeStampHasValue = alarmBattery.TimeStampHasValue.Value.AddHours(8);
                                 historyAlarmAction.InsertAlarm(alarmBattery);
 
                                 // push notification
@@ -707,9 +707,9 @@ namespace MQTT_Vilog_Malaysia.Actions
                         alarmSignal.LoggerId = loggerid;
                         alarmSignal.ChannelId = $"{loggerid}_07";
                         alarmSignal.ChannelName = "9. Signal";
-                        alarmSignal.Content = "Lower signal";
-                        alarmSignal.TimeStampHasValue = DateTime.Now.AddHours(7);
-                        alarmSignal.TimeStampAlarm = DateTime.Now.AddHours(7);
+                        alarmSignal.Content = "Low signal";
+                        alarmSignal.TimeStampHasValue = DateTime.Now.AddHours(8);
+                        alarmSignal.TimeStampAlarm = DateTime.Now.AddHours(8);
                         alarmSignal.Type = 28;
 
 
@@ -748,8 +748,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                             if (isInsertAlarm)
                             {
-                                //alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(7);
-                                //alarmSignal.TimeStampHasValue = alarmSignal.TimeStampHasValue.Value.AddHours(7);
+                                //alarmSignal.TimeStampAlarm = alarmSignal.TimeStampAlarm.Value.AddHours(8);
+                                //alarmSignal.TimeStampHasValue = alarmSignal.TimeStampHasValue.Value.AddHours(8);
                                 historyAlarmAction.InsertAlarm(alarmSignal);
 
                                 // push notification
