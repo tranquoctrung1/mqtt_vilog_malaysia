@@ -33,11 +33,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                 {
                     DataLoggerModel dataUpdate = new DataLoggerModel();
                     dataUpdate.Value = Math.Round(realtimeData.ForwardFlow, 2);
-                    dataUpdate.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                    dataUpdate.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                     DataLoggerModel dataUpdateIndex = new DataLoggerModel();
                     dataUpdateIndex.Value = Math.Round(realtimeData.ForwardIndex, 2);
-                    dataUpdateIndex.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                    dataUpdateIndex.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                     await channelConfigAction.UpdateValueAction(channelForward.ChannelId, dataUpdate);
                     await channelConfigAction.UpdateIndexValueAction(channelForward.ChannelId, dataUpdateIndex);
@@ -51,11 +51,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                         {
                             DataLoggerModel el = new DataLoggerModel();
                             el.Value = Math.Round(item.ForwardFlow, 2);
-                            el.TimeStamp = item.TimeStamp.AddHours(7);
+                            el.TimeStamp = item.TimeStamp.AddHours(8);
 
                             DataLoggerModel el2 = new DataLoggerModel();
                             el2.Value = Math.Round(item.ForwardIndex, 2);
-                            el2.TimeStamp = item.TimeStamp.AddHours(7);
+                            el2.TimeStamp = item.TimeStamp.AddHours(8);
 
                             dataInsert.Add(el);
                             dataInsertIndex.Add(el2);
@@ -71,11 +71,11 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     DataLoggerModel dataUpdate = new DataLoggerModel();
                     dataUpdate.Value = Math.Round(realtimeData.ReverseFlow, 2);
-                    dataUpdate.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                    dataUpdate.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                     DataLoggerModel dataUpdateIndex = new DataLoggerModel();
                     dataUpdateIndex.Value = Math.Round(realtimeData.ReverseIndex, 2);
-                    dataUpdateIndex.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                    dataUpdateIndex.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                     await channelConfigAction.UpdateValueAction(channelReverse.ChannelId, dataUpdate);
                     await channelConfigAction.UpdateIndexValueAction(channelReverse.ChannelId, dataUpdateIndex);
@@ -89,11 +89,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                         {
                             DataLoggerModel el = new DataLoggerModel();
                             el.Value = Math.Round(item.ReverseFlow, 2);
-                            el.TimeStamp = item.TimeStamp.AddHours(7);
+                            el.TimeStamp = item.TimeStamp.AddHours(8);
 
                             DataLoggerModel el2 = new DataLoggerModel();
                             el2.Value = Math.Round(item.ReverseIndex, 2);
-                            el2.TimeStamp = item.TimeStamp.AddHours(7);
+                            el2.TimeStamp = item.TimeStamp.AddHours(8);
 
                             dataInsert.Add(el);
                             dataInsertIndex.Add(el2);
@@ -109,37 +109,37 @@ namespace MQTT_Vilog_Malaysia.Actions
                 // forward total channel
                 DataLoggerModel dataUpdateForwardTotal = new DataLoggerModel();
                 dataUpdateForwardTotal.Value = Math.Round(realtimeData.ForwardIndex, 2);
-                dataUpdateForwardTotal.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                dataUpdateForwardTotal.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                 // reverse total channel
                 DataLoggerModel dataUpdateReverseTotal = new DataLoggerModel();
                 dataUpdateReverseTotal.Value = Math.Round(realtimeData.ReverseIndex, 2);
-                dataUpdateReverseTotal.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                dataUpdateReverseTotal.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                 // net total channel
                 DataLoggerModel dataUpdateNetTotal = new DataLoggerModel();
                 dataUpdateNetTotal.Value = Math.Round(realtimeData.NetIndex, 2);
-                dataUpdateNetTotal.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                dataUpdateNetTotal.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                 // alarm channel
                 DataLoggerModel dataUpdateAlarm = new DataLoggerModel();
                 dataUpdateAlarm.Value = realtimeData.Alarm;
-                dataUpdateAlarm.TimeStamp = realtimeData.TimeStamp.AddHours(7);
+                dataUpdateAlarm.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
                 // battery channel
                 DataLoggerModel dataBattery = new DataLoggerModel();
                 dataBattery.Value = battery;
-                dataBattery.TimeStamp = DateTime.Now.AddHours(7);
+                dataBattery.TimeStamp = DateTime.Now.AddHours(8);
 
                 // battery capacity channel
                 DataLoggerModel dataBatteryCapacity = new DataLoggerModel();
                 dataBatteryCapacity.Value = Math.Round(realtimeData.BatteryRemain, 2);
-                dataBatteryCapacity.TimeStamp = DateTime.Now.AddHours(7);
+                dataBatteryCapacity.TimeStamp = DateTime.Now.AddHours(8);
 
                 // signal channel
                 DataLoggerModel dataSignal = new DataLoggerModel();
                 dataSignal.Value = signal;
-                dataSignal.TimeStamp = DateTime.Now.AddHours(7);
+                dataSignal.TimeStamp = DateTime.Now.AddHours(8);
 
                 await channelConfigAction.UpdateValueAction($"{imei}_98", dataUpdateForwardTotal);
                 await channelConfigAction.UpdateValueAction($"{imei}_99", dataUpdateReverseTotal);
@@ -176,19 +176,19 @@ namespace MQTT_Vilog_Malaysia.Actions
                     {
                         DataLoggerModel el = new DataLoggerModel();
                         el.Value = Math.Round(item.ForwardIndex, 2);
-                        el.TimeStamp = item.TimeStamp.AddHours(7);
+                        el.TimeStamp = item.TimeStamp.AddHours(8);
 
                         DataLoggerModel el2 = new DataLoggerModel();
                         el2.Value = Math.Round(item.ReverseIndex, 2);
-                        el2.TimeStamp = item.TimeStamp.AddHours(7);
+                        el2.TimeStamp = item.TimeStamp.AddHours(8);
 
                         DataLoggerModel el3 = new DataLoggerModel();
                         el3.Value = Math.Round(item.NetIndex, 2);
-                        el3.TimeStamp = item.TimeStamp.AddHours(7);
+                        el3.TimeStamp = item.TimeStamp.AddHours(8);
 
                         DataLoggerModel el4 = new DataLoggerModel();
                         el4.Value = item.Alarm;
-                        el4.TimeStamp = item.TimeStamp.AddHours(7);
+                        el4.TimeStamp = item.TimeStamp.AddHours(8);
 
                         dataInsertForwardTotal.Add(el);
                         dataInsertReverseTotal.Add(el2);
@@ -231,11 +231,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                     if (channelForward != "")
                     {
                         DataLoggerModel data = new DataLoggerModel();
-                        data.TimeStamp = real.TimeStamp.AddHours(7);
+                        data.TimeStamp = real.TimeStamp.AddHours(8);
                         data.Value = real.ForwardFlow;
 
                         DataLoggerModel index = new DataLoggerModel();
-                        index.TimeStamp = real.TimeStamp.AddHours(7);
+                        index.TimeStamp = real.TimeStamp.AddHours(8);
                         index.Value = real.ForwardIndex;
 
                         await channelConfigAction.UpdateValueAction(channelForward, data);
@@ -246,11 +246,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                     if (channelReverse != "")
                     {
                         DataLoggerModel data = new DataLoggerModel();
-                        data.TimeStamp = real.TimeStamp.AddHours(7);
+                        data.TimeStamp = real.TimeStamp.AddHours(8);
                         data.Value = real.ReverseFlow;
 
                         DataLoggerModel index = new DataLoggerModel();
-                        index.TimeStamp = real.TimeStamp.AddHours(7);
+                        index.TimeStamp = real.TimeStamp.AddHours(8);
                         index.Value = real.ReverseIndex;
 
                         await channelConfigAction.UpdateValueAction(channelReverse, data);
@@ -261,7 +261,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
 
                     DataLoggerModel datamodbus = new DataLoggerModel();
-                    datamodbus.TimeStamp = real.TimeStamp.AddHours(7);
+                    datamodbus.TimeStamp = real.TimeStamp.AddHours(8);
                     datamodbus.Value = real.ModbusPowerSupplyDown;
                     await channelConfigAction.UpdateValueAction($"{imei}_100", datamodbus);
                     List<DataLoggerModel> t = new List<DataLoggerModel>();
@@ -269,7 +269,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t, $"{imei}_100");
 
                     DataLoggerModel dataMemory = new DataLoggerModel();
-                    dataMemory.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataMemory.TimeStamp = real.TimeStamp.AddHours(8);
                     dataMemory.Value = real.MemoryError;
                     await channelConfigAction.UpdateValueAction($"{imei}_101", dataMemory);
                     List<DataLoggerModel> t2 = new List<DataLoggerModel>();
@@ -277,7 +277,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t2, $"{imei}_101");
 
                     DataLoggerModel dataLowTransmitter = new DataLoggerModel();
-                    dataLowTransmitter.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataLowTransmitter.TimeStamp = real.TimeStamp.AddHours(8);
                     dataLowTransmitter.Value = real.LowTransmitterVoltage;
                     await channelConfigAction.UpdateValueAction($"{imei}_103", dataLowTransmitter);
                     List<DataLoggerModel> t3 = new List<DataLoggerModel>();
@@ -285,7 +285,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t3, $"{imei}_103");
 
                     DataLoggerModel dataReverse = new DataLoggerModel();
-                    dataReverse.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataReverse.TimeStamp = real.TimeStamp.AddHours(8);
                     dataReverse.Value = real.ReverseFlowWarning;
                     await channelConfigAction.UpdateValueAction($"{imei}_104", dataReverse);
                     List<DataLoggerModel> t4 = new List<DataLoggerModel>();
@@ -293,7 +293,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t4, $"{imei}_104");
 
                     DataLoggerModel dataDrying = new DataLoggerModel();
-                    dataDrying.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataDrying.TimeStamp = real.TimeStamp.AddHours(8);
                     dataDrying.Value = real.DryingWarning;
                     await channelConfigAction.UpdateValueAction($"{imei}_105", dataDrying);
                     List<DataLoggerModel> t5 = new List<DataLoggerModel>();
@@ -301,7 +301,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t5, $"{imei}_105");
 
                     DataLoggerModel dataLowFlowMeter = new DataLoggerModel();
-                    dataLowFlowMeter.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataLowFlowMeter.TimeStamp = real.TimeStamp.AddHours(8);
                     dataLowFlowMeter.Value = real.LowFlowMeterVoltage;
                     await channelConfigAction.UpdateValueAction($"{imei}_106", dataLowFlowMeter);
                     List<DataLoggerModel> t6 = new List<DataLoggerModel>();
@@ -309,7 +309,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t6, $"{imei}_106");
 
                     DataLoggerModel dataCommunication = new DataLoggerModel();
-                    dataCommunication.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataCommunication.TimeStamp = real.TimeStamp.AddHours(8);
                     dataCommunication.Value = real.CommunicationError;
                     await channelConfigAction.UpdateValueAction($"{imei}_107", dataCommunication);
                     List<DataLoggerModel> t7 = new List<DataLoggerModel>();
@@ -318,12 +318,12 @@ namespace MQTT_Vilog_Malaysia.Actions
 
 
                     DataLoggerModel dataNetIndex = new DataLoggerModel();
-                    dataNetIndex.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataNetIndex.TimeStamp = real.TimeStamp.AddHours(8);
                     dataNetIndex.Value = real.NetIndex;
                     await channelConfigAction.UpdateValueAction($"{imei}_108", dataNetIndex);
 
                     DataLoggerModel dataSignal = new DataLoggerModel();
-                    dataSignal.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataSignal.TimeStamp = real.TimeStamp.AddHours(8);
                     dataSignal.Value = signal;
                     await channelConfigAction.UpdateValueAction($"{imei}_109", dataSignal);
                     List<DataLoggerModel> t9 = new List<DataLoggerModel>();
@@ -331,7 +331,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     await dataLoggerAction.InsertDataLogger(t9, $"{imei}_109");
 
                     DataLoggerModel dataBattery = new DataLoggerModel();
-                    dataBattery.TimeStamp = real.TimeStamp.AddHours(7);
+                    dataBattery.TimeStamp = real.TimeStamp.AddHours(8);
                     dataBattery.Value = battery;
                     await channelConfigAction.UpdateValueAction($"{imei}_110", dataBattery);
                     List<DataLoggerModel> t10 = new List<DataLoggerModel>();
@@ -362,23 +362,23 @@ namespace MQTT_Vilog_Malaysia.Actions
                         list[i].ReverseFlow = Math.Round(reverseFlow, 2);
 
                         DataLoggerModel el = new DataLoggerModel();
-                        el.TimeStamp = list[i].TimeStamp.AddHours(7);
+                        el.TimeStamp = list[i].TimeStamp.AddHours(8);
                         el.Value = list[i].ForwardFlow;
 
                         DataLoggerModel el2 = new DataLoggerModel();
-                        el2.TimeStamp = list[i].TimeStamp.AddHours(7);
+                        el2.TimeStamp = list[i].TimeStamp.AddHours(8);
                         el2.Value = list[i].ReverseFlow;
 
                         DataLoggerModel el3 = new DataLoggerModel();
-                        el3.TimeStamp = list[i].TimeStamp.AddHours(7);
+                        el3.TimeStamp = list[i].TimeStamp.AddHours(8);
                         el3.Value = list[i].ForwardIndex;
 
                         DataLoggerModel el4 = new DataLoggerModel();
-                        el4.TimeStamp = list[i].TimeStamp.AddHours(7);
+                        el4.TimeStamp = list[i].TimeStamp.AddHours(8);
                         el4.Value = list[i].ReverseIndex;
 
                         DataLoggerModel el5 = new DataLoggerModel();
-                        el5.TimeStamp = list[i].TimeStamp.AddHours(7);
+                        el5.TimeStamp = list[i].TimeStamp.AddHours(8);
                         el5.Value = list[i].NetIndex;
 
                         listForwardFlow.Add(el);
@@ -401,15 +401,15 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     double forwarFlow = (list[list.Count - 1].ForwardIndex - lastIndexForward.Value.Value) * diff;
 
                                     DataLoggerModel el = new DataLoggerModel();
-                                    el.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(7);
+                                    el.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(8);
                                     el.Value = forwarFlow;
 
                                     DataLoggerModel el3 = new DataLoggerModel();
-                                    el3.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(7);
+                                    el3.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(8);
                                     el3.Value = list[list.Count - 1].ForwardIndex;
 
                                     DataLoggerModel el4 = new DataLoggerModel();
-                                    el4.TimeStamp = listNetIndex[listNetIndex.Count - 1].TimeStamp.Value.AddHours(7);
+                                    el4.TimeStamp = listNetIndex[listNetIndex.Count - 1].TimeStamp.Value.AddHours(8);
                                     el4.Value = listNetIndex[listNetIndex.Count - 1].Value;
 
 
@@ -418,9 +418,9 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     listNetIndex.Add(el4);
                                 }
 
-                                listForwardFlow = listForwardFlow.Where(d => d.TimeStamp > lastIndexForward.TimeStamp.Value.AddHours(7)).ToList();
-                                listIndexForward = listIndexForward.Where(d => d.TimeStamp > lastIndexForward.TimeStamp.Value.AddHours(7)).ToList();
-                                listNetIndex = listNetIndex.Where(d => d.TimeStamp > lastIndexForward.TimeStamp.Value.AddHours(7)).ToList();
+                                listForwardFlow = listForwardFlow.Where(d => d.TimeStamp > lastIndexForward.TimeStamp.Value.AddHours(8)).ToList();
+                                listIndexForward = listIndexForward.Where(d => d.TimeStamp > lastIndexForward.TimeStamp.Value.AddHours(8)).ToList();
+                                listNetIndex = listNetIndex.Where(d => d.TimeStamp > lastIndexForward.TimeStamp.Value.AddHours(8)).ToList();
                             }
 
                         }
@@ -466,19 +466,19 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     double reverseflow = (list[list.Count - 1].ForwardIndex - lastIndexReverse.Value.Value) * diff;
 
                                     DataLoggerModel el2 = new DataLoggerModel();
-                                    el2.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(7);
+                                    el2.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(8);
                                     el2.Value = reverseflow;
 
                                     DataLoggerModel el4 = new DataLoggerModel();
-                                    el4.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(7);
+                                    el4.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(8);
                                     el4.Value = list[list.Count - 1].ReverseIndex;
 
                                     listReverseFlow.Add(el2);
                                     listIndexReverse.Add(el4);
                                 }
 
-                                listReverseFlow = listForwardFlow.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(7)).ToList();
-                                listIndexReverse = listIndexReverse.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(7)).ToList();
+                                listReverseFlow = listForwardFlow.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(8)).ToList();
+                                listIndexReverse = listIndexReverse.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(8)).ToList();
                             }
 
 

@@ -10,7 +10,7 @@ internal class Program
     private static async Task Main(string[] args)
     {
 
-        //// push notification
+        // push notification
         //using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
         //{
         //    List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
