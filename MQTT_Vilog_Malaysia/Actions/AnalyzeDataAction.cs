@@ -50,8 +50,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                     log.NetIndex = convertAction.ConvertHexToDouble(reg[1]);
                     log.ForwardIndex = convertAction.ConvertHexToDouble(reg[2]);
                     log.ReverseIndex = convertAction.ConvertHexToDouble(reg[3]);
-                    log.BatteryRemain = convertAction.ConvertHexToDouble(reg[4]);
-                    log.Alarm = Convert.ToInt32(reg[5], 16);
+                    log.BatteryRemain = convertAction.ConvertHexToDouble(reg[5]);
+                    log.Alarm = Convert.ToInt32(reg[4], 16);
                     if(log.Alarm > 0)
                     {
                         HistoryAlarmModel alarm = new HistoryAlarmModel();
@@ -358,8 +358,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                         log.NetIndex = convertAction.ConvertHexToDouble(reg[1]);
                         log.ForwardIndex = convertAction.ConvertHexToDouble(reg[2]);
                         log.ReverseIndex = convertAction.ConvertHexToDouble(reg[3]);
-                        log.BatteryRemain = convertAction.ConvertHexToDouble(reg[4]);
-                        log.Alarm = Convert.ToInt32(reg[5], 16);
+                        log.BatteryRemain = convertAction.ConvertHexToDouble(reg[5]);
+                        log.Alarm = Convert.ToInt32(reg[4], 16);
                     }
 
                     list.Add(log);

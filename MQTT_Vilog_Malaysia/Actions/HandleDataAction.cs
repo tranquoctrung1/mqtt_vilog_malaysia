@@ -463,7 +463,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                 if (lastIndexReverse.TimeStamp.Value == list[list.Count - 1].TimeStamp.AddMinutes(-diffMinutes))
                                 {
                                     double diff = 60 / diffMinutes;
-                                    double reverseflow = (list[list.Count - 1].ForwardIndex - lastIndexReverse.Value.Value) * diff;
+                                    double reverseflow = (list[list.Count - 1].ReverseIndex - lastIndexReverse.Value.Value) * diff;
 
                                     DataLoggerModel el2 = new DataLoggerModel();
                                     el2.TimeStamp = list[list.Count - 1].TimeStamp.AddHours(8);
