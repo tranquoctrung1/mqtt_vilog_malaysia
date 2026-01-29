@@ -1,0 +1,5 @@
+An error occurred while deserializing the Latitude property of class MQTT_Vilog_Malaysia.Models.SiteModel: The input string 'null' was not in a correct format.
+An error occurred while deserializing the Latitude property of class MQTT_Vilog_Malaysia.Models.SiteModel: The input string 'null' was not in a correct format.
+One or more errors occurred. (An error occurred while deserializing the Latitude property of class MQTT_Vilog_Malaysia.Models.SiteModel: The input string 'null' was not in a correct format.)
+An error occurred while deserializing the Latitude property of class MQTT_Vilog_Malaysia.Models.SiteModel: The input string 'null' was not in a correct format.
+One or more errors occurred. (An error occurred while deserializing the Latitude property of class MQTT_Vilog_Malaysia.Models.SiteModel: The input string 'null' was not in a correct format.)

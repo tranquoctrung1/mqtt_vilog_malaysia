@@ -61,6 +61,11 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                         var dataObjects = JsonSerializer.Deserialize<PayloadMQTTModel>(payload);
 
+                                        using (WriteJsonFileAction writeJsonFileAction = new WriteJsonFileAction())
+                                        {
+                                            writeJsonFileAction.WriteJsonFileAsync(topic, dataObjects);
+                                        }
+
                                         if (dataObjects.IMEI != "")
                                         {
                                             using (CheckImeiAvailableAction checkImeiAvailableAction = new CheckImeiAvailableAction())
@@ -70,6 +75,51 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                 //int check = await checkImeiAvailableAction.CheckImeiAvailable(dataObjects.IMEI, url);
 
                                                 //if (check == 1)
+
+                                                using(ConfigVilogAction configVilogAction = new ConfigVilogAction())
+                                                {
+                                                    ConfigVilogModel config = await configVilogAction.GetConfigVilog(loggerid);
+                                                    if (config != null)
+                                                    {
+                                                        // update siteid in config vilog
+                                                        configVilogAction.UpdateConfigVilog(config.oldSiteId);
+
+                                                        using (SiteAction siteActionUpdate = new SiteAction())
+                                                        {
+                                                            siteActionUpdate.UpdateSite(config);
+                                                        }
+
+                                                        using(ChannelConfigAction channelConfigAction = new ChannelConfigAction())
+                                                        {
+                                                            channelConfigAction.UpdateChannelConfigVilog(config);
+                                                        }
+
+                                                        Thread.Sleep(5000);
+
+                                                        Public _public = new Public();
+                                                        string oldTopic = $"Vilog_{config.oldLocation}_{config.oldSiteId}_SUB";
+
+                                                        await _public.PublishAsync(oldTopic);
+                                                    }
+                                                    else
+                                                    {
+
+                                                        ConfigVilogModel configOld = await configVilogAction.GetConfigVilogByOldSiteId(loggerid);
+
+                                                        if(configOld != null)
+                                                        {
+                                                            Thread.Sleep(5000);
+
+                                                            Public _public = new Public();
+                                                            string oldTopic = $"Vilog_{configOld.oldLocation}_{configOld.oldSiteId}_SUB";
+
+                                                            await _public.PublishAsync(oldTopic);
+
+                                                            // update siteid in config vilog
+                                                            configVilogAction.UpdateConfigVilog(configOld.oldSiteId);
+                                                        }
+                                                    }
+                                                }
 
                                                 using (SiteAction siteAction2 = new SiteAction())
                                                 {
@@ -328,7 +378,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                             battery.ChannelId = $"{loggerid}_110";
                                                             battery.ChannelName = "2.7 Battery";
                                                             battery.LoggerId = loggerid;
-                                                            battery.Unit = "-";
+                                                            battery.Unit = "V";
                                                             battery.ForwardFlow = false;
                                                             battery.ReverseFlow = false;
                                                             battery.Pressure1 = false;
@@ -504,9 +554,9 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                             ChannelConfigModel battery = new ChannelConfigModel();
                                                             battery.ChannelId = $"{loggerid}_05";
-                                                            battery.ChannelName = "7. Battery Logger";
+                                                            battery.ChannelName = "7. Logger Battery";
                                                             battery.LoggerId = loggerid;
-                                                            battery.Unit = "-";
+                                                            battery.Unit = "V";
                                                             battery.ForwardFlow = false;
                                                             battery.ReverseFlow = false;
                                                             battery.Pressure1 = false;
@@ -522,9 +572,9 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                             ChannelConfigModel capacity = new ChannelConfigModel();
                                                             capacity.ChannelId = $"{loggerid}_06";
-                                                            capacity.ChannelName = "8. Battery Capacity";
+                                                            capacity.ChannelName = "8. Meter Battery Capacity";
                                                             capacity.LoggerId = loggerid;
-                                                            capacity.Unit = "V";
+                                                            capacity.Unit = "Ah";
                                                             capacity.ForwardFlow = false;
                                                             capacity.ReverseFlow = false;
                                                             capacity.Pressure1 = false;
@@ -575,8 +625,16 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                                 DateTime time = DateTime.Parse(dataObjects.time.ToString());
                                                                 time = time.AddHours(8);
 
-                                                                handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
-                                                                Console.WriteLine("Done executed handle data Kronhe Meter");
+                                                                if (time.Year > DateTime.Now.Year)
+                                                                {
+                                                                    handleDataAction.HandleDataKronheMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    Console.WriteLine("Done executed handle data Kronhe Meter");
+                                                                }
+                                                                else
+                                                                {
+                                                                    handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    Console.WriteLine("Done executed handle data Kronhe Meter");
+                                                                }
                                                             }
 
                                                             checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
@@ -613,8 +671,16 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                                 DateTime time = DateTime.Parse(dataObjects.time.ToString());
                                                                 time = time.AddHours(8);
 
-                                                                handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
-                                                                Console.WriteLine("Done executed handle data Kronhe Meter");
+                                                                if(time.Year > DateTime.Now.Year )
+                                                                {
+                                                                    handleDataAction.HandleDataKronheMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    Console.WriteLine("Done executed handle data Kronhe Meter");
+                                                                }
+                                                                else
+                                                                {
+                                                                    handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    Console.WriteLine("Done executed handle data Kronhe Meter");
+                                                                }
                                                             }
 
                                                             checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);

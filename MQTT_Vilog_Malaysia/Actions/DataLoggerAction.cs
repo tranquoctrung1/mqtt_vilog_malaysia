@@ -78,6 +78,76 @@ namespace MQTT_Vilog_Malaysia.Actions
                 await writeLogAction.WriteErrorLog(ex.Message);
             }
         }
+
+        public async Task RenameDataLogger(string oldChannelId, string newChannelId)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+
+            try
+            {
+                Connect connect = new Connect();
+
+                string oldCollectionName = $"t_Data_Logger_{oldChannelId}";
+                string newCollectionName = $"t_Data_Logger_{newChannelId}";
+
+                // Check old collection exists
+                var filterOld = new BsonDocument("name", oldCollectionName);
+                var oldCollections = await connect.db
+                    .ListCollectionNamesAsync(new ListCollectionNamesOptions { Filter = filterOld });
+
+                if (!await oldCollections.AnyAsync())
+                {
+                    // Không tồn tại collection cũ → không rename
+                    return;
+                }
+
+                // Rename collection (dropTarget = true nếu collection mới đã tồn tại)
+                await connect.db.RenameCollectionAsync(
+                    oldCollectionName,
+                    newCollectionName,
+                    new RenameCollectionOptions { DropTarget = false }
+                );
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.ToString());
+            }
+        }
+
+        public async Task RenameIndexLogger(string oldChannelId, string newChannelId)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+
+            try
+            {
+                Connect connect = new Connect();
+
+                string oldCollectionName = $"t_Index_Logger_{oldChannelId}";
+                string newCollectionName = $"t_Index_Logger_{newChannelId}";
+
+                // Check old collection exists
+                var filterOld = new BsonDocument("name", oldCollectionName);
+                var oldCollections = await connect.db
+                    .ListCollectionNamesAsync(new ListCollectionNamesOptions { Filter = filterOld });
+
+                if (!await oldCollections.AnyAsync())
+                {
+                    // Không tồn tại collection cũ → không rename
+                    return;
+                }
+
+                // Rename collection (dropTarget = true nếu collection mới đã tồn tại)
+                await connect.db.RenameCollectionAsync(
+                    oldCollectionName,
+                    newCollectionName,
+                    new RenameCollectionOptions { DropTarget = false }
+                );
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.ToString());
+            }
+        }
         public async Task<DateTime?> GetCurrentTimeStampDataLogger(string channelid)
         {
             WriteLogAction writeLogAction = new WriteLogAction();

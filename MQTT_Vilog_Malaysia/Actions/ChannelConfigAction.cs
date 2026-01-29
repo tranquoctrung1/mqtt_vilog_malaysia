@@ -115,6 +115,8 @@ namespace MQTT_Vilog_Malaysia.Actions
         public async Task<long> UpdateValueAction(string channelid, DataLoggerModel values)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
+
+
             long nRows = 0;
 
             try
@@ -169,6 +171,50 @@ namespace MQTT_Vilog_Malaysia.Actions
             }
 
             return nRows;
+        }
+
+        public async void UpdateChannelConfigVilog(ConfigVilogModel site)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+            DataLoggerAction dataLoggerAction = new DataLoggerAction();
+
+            try
+            {
+                Connect connect = new Connect();
+
+                var collection = connect.db.GetCollection<ChannelConfigModel>("t_Channel_Configurations");
+
+                List<ChannelConfigModel> channels = await GetChannelByLoggerId(site.oldSiteId);
+
+                if (channels.Count > 0)
+                {
+                    foreach (var channel in channels)
+                    {
+                        if (channel.ChannelId != "")
+                        {
+
+                            string[] channelSplit = channel.ChannelId.Split("_");
+                            string channelNumber = channelSplit.Length > 1 ? channelSplit[channelSplit.Length - 1] : "";
+
+
+                            var filter = Builders<ChannelConfigModel>.Filter.Eq("ChannelId", channel.ChannelId);
+                            var update = Builders<ChannelConfigModel>.Update
+                            .Set(x => x.ChannelId, $"{site.siteId}_{channelNumber}")
+                            .Set(x => x.LoggerId, site.siteId);
+
+                            await collection.UpdateOneAsync(filter, update);
+                            await dataLoggerAction.RenameDataLogger(channel.ChannelId, $"{site.siteId}_{channelNumber}");
+                            await dataLoggerAction.RenameIndexLogger(channel.ChannelId, $"{site.siteId}_{channelNumber}");
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+
         }
     }
 }
