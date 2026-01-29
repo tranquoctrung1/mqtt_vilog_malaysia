@@ -1,0 +1,126 @@
+{
+  "TimeRecieveData": "28/01/2026 10:13:01",
+  "Data": {
+    "IMEI": "868977089654040",
+    "IMSI": "502161082196450",
+    "Model": "RS485-CB",
+    "Payload": "01421265fd479cf371479cf4a34018e2f80000000042068887",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 3.631,
+    "signal": 26,
+    "time": "2026-01-28T02:42:03Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "014216b1ef479cf01b479cf14c4018e2f800000000420688ae",
+      "2026-01-28T02:30:56Z"
+    ]
+  }
+}
+{
+  "TimeRecieveData": "28/01/2026 10:13:35",
+  "Data": {
+    "IMEI": "868977089654040",
+    "IMSI": "502161082196450",
+    "Model": "RS485-CB",
+    "Payload": "01421265fd479cf371479cf4a34018e2f80000000042068887",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 3.631,
+    "signal": 26,
+    "time": "2026-01-28T02:42:03Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "014216b1ef479cf01b479cf14c4018e2f800000000420688ae",
+      "2026-01-28T02:30:56Z"
+    ]
+  }
+}
+{
+  "TimeRecieveData": "28/01/2026 10:14:09",
+  "Data": {
+    "IMEI": "868977089654040",
+    "IMSI": "502161082196450",
+    "Model": "RS485-CB",
+    "Payload": "01421265fd479cf371479cf4a34018e2f80000000042068887",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 3.631,
+    "signal": 26,
+    "time": "2026-01-28T02:42:03Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "014216b1ef479cf01b479cf14c4018e2f800000000420688ae",
+      "2026-01-28T02:30:56Z"
+    ]
+  }
+}
+{
+  "TimeRecieveData": "28/01/2026 10:18:45",
+  "Data": {
+    "IMEI": "868977089654040",
+    "IMSI": "502161082196450",
+    "Model": "RS485-CB",
+    "Payload": "01421265fd479cf371479cf4a34018e2f80000000042068887",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 3.631,
+    "signal": 26,
+    "time": "2026-01-28T02:42:03Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "014216b1ef479cf01b479cf14c4018e2f800000000420688ae",
+      "2026-01-28T02:30:56Z"
+    ]
+  }
+}
+{
+  "TimeRecieveData": "28/01/2026 10:19:23",
+  "Data": {
+    "IMEI": "868977089654040",
+    "IMSI": "502161082196450",
+    "Model": "RS485-CB",
+    "Payload": "01421265fd479cf371479cf4a34018e2f80000000042068887",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 3.631,
+    "signal": 26,
+    "time": "2026-01-28T02:42:03Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "014216b1ef479cf01b479cf14c4018e2f800000000420688ae",
+      "2026-01-28T02:30:56Z"
+    ]
+  }
+}
+{
+  "TimeRecieveData": "28/01/2026 10:21:39",
+  "Data": {
+    "IMEI": "868977089654040",
+    "IMSI": "502161082196450",
+    "Model": "RS485-CB",
+    "Payload": "01421265fd479cf371479cf4a34018e2f80000000042068887",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 3.631,
+    "signal": 26,
+    "time": "2026-01-28T02:42:03Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "014216b1ef479cf01b479cf14c4018e2f800000000420688ae",
+      "2026-01-28T02:30:56Z"
+    ]
+  }
+}

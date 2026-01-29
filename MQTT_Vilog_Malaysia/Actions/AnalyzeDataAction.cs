@@ -335,7 +335,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                         reg.Add(data[0].Substring(i, 8));
                     }
                     DateTime time = DateTime.Parse(data[1]).ToUniversalTime();
-                    time = time.AddHours(8);
+                    //time = time.AddHours(8);
 
                     LogKronheModel log = new LogKronheModel();
 

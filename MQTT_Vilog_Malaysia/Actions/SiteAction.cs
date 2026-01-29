@@ -106,5 +106,34 @@ namespace MQTT_Vilog_Malaysia.Actions
                 await writeLogAction.WriteErrorLog(ex.Message);
             }
         }
+        public async void UpdateSite(ConfigVilogModel site)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+
+            try
+            {
+                Connect connect = new Connect();
+
+                var collection = connect.db.GetCollection<SiteModel>("t_Sites");
+
+                var filter = Builders<SiteModel>.Filter.And(
+                    Builders<SiteModel>.Filter.Eq(x => x.SiteId, site.oldSiteId),
+                    Builders<SiteModel>.Filter.Eq(x => x.Location, site.oldLocation)
+                );
+
+                var update = Builders<SiteModel>.Update
+                    .Set(x => x.SiteId, site.siteId)
+                    .Set(x => x.Location, site.location);
+
+                await collection.UpdateOneAsync(
+                   filter, update
+                );
+
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+        }
     }
 }

@@ -1,0 +1,21 @@
+{
+  "TimeRecieveData": "29/01/2026 10:59:24",
+  "Data": {
+    "IMEI": "868977089862676",
+    "IMSI": "452040926663641",
+    "Model": "RS485-CB",
+    "Payload": "01ffffffffffffffffffffffffffffffffffffffffffffffff",
+    "interrupt": 0,
+    "interrupt_level": 0,
+    "battery": 4.077,
+    "signal": 21,
+    "time": "2025-01-28T23:56:04Z",
+    "latitude": 0,
+    "longitude": 0,
+    "gps_time": "1970-01-01T00:00:00Z",
+    "1": [
+      "01ffffffffffffffffffffffffffffffffffffffffffffffff",
+      "2025-01-28T23:41:43Z"
+    ]
+  }
+}

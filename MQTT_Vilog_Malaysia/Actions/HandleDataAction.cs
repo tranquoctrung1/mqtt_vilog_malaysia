@@ -210,6 +210,311 @@ namespace MQTT_Vilog_Malaysia.Actions
                 await writeLogAction.WriteErrorLog(ex.Message);
             }
         }
+
+        public async void HandleDataKronheMeterOverTime(string stringRealTime, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+            AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
+            ChannelConfigAction channelConfigAction = new ChannelConfigAction();
+            DataLoggerAction dataLoggerAction = new DataLoggerAction();
+
+            try
+            {
+                LogKronheModel realtimeData = await analyzeDataAction.AnalyzeDataRealTimeHronheMeter(stringRealTime, time, siteid, location, imei, signal, battery);
+                List<LogKronheModel> logs = await analyzeDataAction.AnalyzeLogDataHronheMeter(Log);
+
+                List<ChannelConfigModel> channelConfig = await channelConfigAction.GetChannelByLoggerId(imei);
+
+                ChannelConfigModel channelForward = channelConfig.Where(c => c.ForwardFlow == true).FirstOrDefault();
+                ChannelConfigModel channelReverse = channelConfig.Where(c => c.ReverseFlow == true).FirstOrDefault();
+
+                DateTime now = DateTime.Now.AddHours(8);
+                DateTime realtime = realtimeData.TimeStamp.AddHours(8);
+
+                if (channelForward.ChannelId != "")
+                {
+                    DataLoggerModel dataUpdate = new DataLoggerModel();
+                    dataUpdate.Value = Math.Round(realtimeData.ForwardFlow, 2);
+                    dataUpdate.TimeStamp = DateTime.Now.AddHours(8);
+
+                    DataLoggerModel dataUpdateIndex = new DataLoggerModel();
+                    dataUpdateIndex.Value = Math.Round(realtimeData.ForwardIndex, 2);
+                    dataUpdateIndex.TimeStamp = DateTime.Now.AddHours(8);
+
+                    await channelConfigAction.UpdateValueAction(channelForward.ChannelId, dataUpdate);
+                    await channelConfigAction.UpdateIndexValueAction(channelForward.ChannelId, dataUpdateIndex);
+
+                    if (logs.Count > 0)
+                    {
+                        List<DataLoggerModel> dataInsert = new List<DataLoggerModel>();
+                        List<DataLoggerModel> dataInsertIndex = new List<DataLoggerModel>();
+
+                        double totalSecondDiff = 0;
+
+                        if(logs.Count >= 2)
+                        {
+                            DateTime timeLog1 = logs[0].TimeStamp;
+                            DateTime timeLog2 = logs[1].TimeStamp;
+
+                            totalSecondDiff = Math.Abs((timeLog1 - timeLog2).TotalSeconds);
+                        }
+
+                        DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward.ChannelId);
+
+                        foreach (var item in logs)
+                        {
+
+                            DateTime timeLog = item.TimeStamp.AddHours(8);
+
+                            double diff = Math.Abs((realtime - timeLog).TotalSeconds);
+
+                            DateTime realTimeLog = now.AddSeconds(-diff);
+                            realTimeLog = new DateTime(realTimeLog.Year, realTimeLog.Month, realTimeLog.Day, realTimeLog.Hour, item.TimeStamp.Minute, 0);
+                            realTimeLog = realTimeLog.AddHours(8);
+
+                            DataLoggerModel el = new DataLoggerModel();
+                            el.Value = Math.Round(item.ForwardFlow, 2);
+                            el.TimeStamp = realTimeLog;
+
+                            DataLoggerModel el2 = new DataLoggerModel();
+                            el2.Value = Math.Round(item.ForwardIndex, 2);
+                            el2.TimeStamp = realTimeLog;
+
+                            if(currentTime != null)
+                            {
+                                if (DateTime.Compare(realTimeLog, currentTime.Value.AddHours(7)) > 0)
+                                {
+                                    dataInsert.Add(el);
+                                    dataInsertIndex.Add(el2);
+                                }
+                            }
+                            else
+                            {
+                                dataInsert.Add(el);
+                                dataInsertIndex.Add(el2);
+                            }
+
+                        }
+
+                        await dataLoggerAction.InsertDataLogger(dataInsert, channelForward.ChannelId);
+                        await dataLoggerAction.InsertIndexLogger(dataInsertIndex, channelForward.ChannelId);
+
+                    }
+                }
+                if (channelReverse.ChannelId != "")
+                {
+
+                    DataLoggerModel dataUpdate = new DataLoggerModel();
+                    dataUpdate.Value = Math.Round(realtimeData.ReverseFlow, 2);
+                    dataUpdate.TimeStamp = DateTime.Now.AddHours(8);
+
+                    DataLoggerModel dataUpdateIndex = new DataLoggerModel();
+                    dataUpdateIndex.Value = Math.Round(realtimeData.ReverseIndex, 2);
+                    dataUpdateIndex.TimeStamp = DateTime.Now.AddHours(8);
+
+                    await channelConfigAction.UpdateValueAction(channelReverse.ChannelId, dataUpdate);
+                    await channelConfigAction.UpdateIndexValueAction(channelReverse.ChannelId, dataUpdateIndex);
+
+                    if (logs.Count > 0)
+                    {
+                        List<DataLoggerModel> dataInsert = new List<DataLoggerModel>();
+                        List<DataLoggerModel> dataInsertIndex = new List<DataLoggerModel>();
+
+                        double totalSecondDiff = 0;
+
+                        if (logs.Count >= 2)
+                        {
+                            DateTime timeLog1 = logs[0].TimeStamp;
+                            DateTime timeLog2 = logs[1].TimeStamp;
+
+                            totalSecondDiff = Math.Abs((timeLog1 - timeLog2).TotalSeconds);
+                        }
+
+                        DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward.ChannelId);
+
+
+                        foreach (var item in logs)
+                        {
+
+                            DateTime timeLog = item.TimeStamp.AddHours(8);
+
+                            double diff = Math.Abs((realtime - timeLog).TotalSeconds);
+
+                            DateTime realTimeLog = now.AddSeconds(-diff);
+                            realTimeLog = new DateTime(realTimeLog.Year, realTimeLog.Month, realTimeLog.Day, realTimeLog.Hour, item.TimeStamp.Minute, 0);
+                            realTimeLog = realTimeLog.AddHours(8);
+
+
+                            DataLoggerModel el = new DataLoggerModel();
+                            el.Value = Math.Round(item.ReverseFlow, 2);
+                            el.TimeStamp = realTimeLog;
+
+                            DataLoggerModel el2 = new DataLoggerModel();
+                            el2.Value = Math.Round(item.ReverseIndex, 2);
+                            el2.TimeStamp = realTimeLog;
+                            if(currentTime != null)
+                            {
+                                if (DateTime.Compare(realTimeLog, currentTime.Value.AddHours(7)) > 0)
+                                {
+                                    dataInsert.Add(el);
+                                    dataInsertIndex.Add(el2);
+                                }
+                            }                    
+                            else
+                            {
+                                dataInsert.Add(el);
+                                dataInsertIndex.Add(el2);
+                            }
+                        }
+
+                        await dataLoggerAction.InsertDataLogger(dataInsert, channelReverse.ChannelId);
+                        await dataLoggerAction.InsertIndexLogger(dataInsertIndex, channelReverse.ChannelId);
+
+                    }
+                }
+
+
+                // forward total channel
+                DataLoggerModel dataUpdateForwardTotal = new DataLoggerModel();
+                dataUpdateForwardTotal.Value = Math.Round(realtimeData.ForwardIndex, 2);
+                dataUpdateForwardTotal.TimeStamp = DateTime.Now.AddHours(8);
+
+                // reverse total channel
+                DataLoggerModel dataUpdateReverseTotal = new DataLoggerModel();
+                dataUpdateReverseTotal.Value = Math.Round(realtimeData.ReverseIndex, 2);
+                dataUpdateReverseTotal.TimeStamp = DateTime.Now.AddHours(8);
+
+                // net total channel
+                DataLoggerModel dataUpdateNetTotal = new DataLoggerModel();
+                dataUpdateNetTotal.Value = Math.Round(realtimeData.NetIndex, 2);
+                dataUpdateNetTotal.TimeStamp = DateTime.Now.AddHours(8);
+
+                // alarm channel
+                DataLoggerModel dataUpdateAlarm = new DataLoggerModel();
+                dataUpdateAlarm.Value = realtimeData.Alarm;
+                dataUpdateAlarm.TimeStamp = DateTime.Now.AddHours(8);
+
+                // battery channel
+                DataLoggerModel dataBattery = new DataLoggerModel();
+                dataBattery.Value = battery;
+                dataBattery.TimeStamp = DateTime.Now.AddHours(8);
+
+                // battery capacity channel
+                DataLoggerModel dataBatteryCapacity = new DataLoggerModel();
+                dataBatteryCapacity.Value = Math.Round(realtimeData.BatteryRemain, 2);
+                dataBatteryCapacity.TimeStamp = DateTime.Now.AddHours(8);
+
+                // signal channel
+                DataLoggerModel dataSignal = new DataLoggerModel();
+                dataSignal.Value = signal;
+                dataSignal.TimeStamp = DateTime.Now.AddHours(8);
+
+                await channelConfigAction.UpdateValueAction($"{imei}_98", dataUpdateForwardTotal);
+                await channelConfigAction.UpdateValueAction($"{imei}_99", dataUpdateReverseTotal);
+                await channelConfigAction.UpdateValueAction($"{imei}_100", dataUpdateNetTotal);
+                await channelConfigAction.UpdateValueAction($"{imei}_101", dataUpdateAlarm);
+                await channelConfigAction.UpdateValueAction($"{imei}_05", dataBattery);
+                await channelConfigAction.UpdateValueAction($"{imei}_06", dataBatteryCapacity);
+                await channelConfigAction.UpdateValueAction($"{imei}_07", dataSignal);
+
+
+                //insert data logger for battery channel
+                List<DataLoggerModel> listInsertBateryChannel = new List<DataLoggerModel>();
+                listInsertBateryChannel.Add(dataBattery);
+                await dataLoggerAction.InsertDataLogger(listInsertBateryChannel, $"{imei}_05");
+
+                //insert data logger for battery capacity channel
+                List<DataLoggerModel> listInsertBateryCapacityChannel = new List<DataLoggerModel>();
+                listInsertBateryCapacityChannel.Add(dataBatteryCapacity);
+                await dataLoggerAction.InsertDataLogger(listInsertBateryCapacityChannel, $"{imei}_06");
+
+                //insert data logger for signal channel
+                List<DataLoggerModel> listInsertSignalChannel = new List<DataLoggerModel>();
+                listInsertSignalChannel.Add(dataSignal);
+                await dataLoggerAction.InsertDataLogger(listInsertSignalChannel, $"{imei}_07");
+
+                List<DataLoggerModel> dataInsertForwardTotal = new List<DataLoggerModel>();
+                List<DataLoggerModel> dataInsertReverseTotal = new List<DataLoggerModel>();
+                List<DataLoggerModel> dataInsertNetTotalTotal = new List<DataLoggerModel>();
+                List<DataLoggerModel> dataInsertAlarmTotal = new List<DataLoggerModel>();
+
+                if (logs.Count > 0)
+                {
+
+                    double totalSecondDiff = 0;
+
+                    if (logs.Count >= 2)
+                    {
+                        DateTime timeLog1 = logs[0].TimeStamp;
+                        DateTime timeLog2 = logs[1].TimeStamp;
+
+                        totalSecondDiff = Math.Abs((timeLog1 - timeLog2).TotalSeconds);
+                    }
+
+                    DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward.ChannelId);
+
+                    foreach (var item in logs)
+                    {
+                        DateTime timeLog = item.TimeStamp.AddHours(8);
+
+                        double diff = Math.Abs((realtime - timeLog).TotalSeconds);
+
+                        DateTime realTimeLog = now.AddSeconds(-diff);
+                        realTimeLog = new DateTime(realTimeLog.Year, realTimeLog.Month, realTimeLog.Day, realTimeLog.Hour, item.TimeStamp.Minute, 0);
+                        realTimeLog = realTimeLog.AddHours(8);
+
+
+                        DataLoggerModel el = new DataLoggerModel();
+                        el.Value = Math.Round(item.ForwardIndex, 2);
+                        el.TimeStamp = realTimeLog;
+
+                        DataLoggerModel el2 = new DataLoggerModel();
+                        el2.Value = Math.Round(item.ReverseIndex, 2);
+                        el2.TimeStamp = realTimeLog;
+
+                        DataLoggerModel el3 = new DataLoggerModel();
+                        el3.Value = Math.Round(item.NetIndex, 2);
+                        el3.TimeStamp = realTimeLog;
+
+                        DataLoggerModel el4 = new DataLoggerModel();
+                        el4.Value = item.Alarm;
+                        el4.TimeStamp = realTimeLog;
+
+                        if(currentTime != null)
+                        {
+                            if (DateTime.Compare(realTimeLog, currentTime.Value.AddHours(7)) > 0)
+                            {
+                                dataInsertForwardTotal.Add(el);
+                                dataInsertReverseTotal.Add(el2);
+                                dataInsertNetTotalTotal.Add(el3);
+                                dataInsertAlarmTotal.Add(el4);
+                            }
+                        }
+                        else
+                        {
+                            dataInsertForwardTotal.Add(el);
+                            dataInsertReverseTotal.Add(el2);
+                            dataInsertNetTotalTotal.Add(el3);
+                            dataInsertAlarmTotal.Add(el4);
+                        }
+                       
+                       
+                    }
+
+                    await dataLoggerAction.InsertDataLogger(dataInsertForwardTotal, $"{imei}_98");
+                    await dataLoggerAction.InsertDataLogger(dataInsertReverseTotal, $"{imei}_99");
+                    await dataLoggerAction.InsertDataLogger(dataInsertNetTotalTotal, $"{imei}_100");
+                    await dataLoggerAction.InsertDataLogger(dataInsertAlarmTotal, $"{imei}_101");
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+        }
         public async void HandleDataSUMeter(string stringRealTime, List<string> logData, string imei, string siteid, string location, int signal, double battery)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
@@ -477,7 +782,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     listIndexReverse.Add(el4);
                                 }
 
-                                listReverseFlow = listForwardFlow.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(8)).ToList();
+                                listReverseFlow = listReverseFlow.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(8)).ToList();
                                 listIndexReverse = listIndexReverse.Where(d => d.TimeStamp > lastIndexReverse.TimeStamp.Value.AddHours(8)).ToList();
                             }
 
