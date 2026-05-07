@@ -1,2 +1,4 @@
 /.vs
 /fbkey.json
+**/bin/
+**/obj/
