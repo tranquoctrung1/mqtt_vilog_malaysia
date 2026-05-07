@@ -1,0 +1,206 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia.Tests\\MQTT_Vilog_Malaysia.Tests.csproj": {}
+  },
+  "projects": {
+    "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia.Tests\\MQTT_Vilog_Malaysia.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia.Tests\\MQTT_Vilog_Malaysia.Tests.csproj",
+        "projectName": "MQTT_Vilog_Malaysia.Tests",
+        "projectPath": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia.Tests\\MQTT_Vilog_Malaysia.Tests.csproj",
+        "packagesPath": "C:\\Users\\tranq\\.nuget\\packages\\",
+        "outputPath": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\tranq\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia\\MQTT_Vilog_Malaysia.csproj": {
+                "projectPath": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia\\MQTT_Vilog_Malaysia.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.200"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia\\MQTT_Vilog_Malaysia.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia\\MQTT_Vilog_Malaysia.csproj",
+        "projectName": "MQTT_Vilog_Malaysia",
+        "projectPath": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia\\MQTT_Vilog_Malaysia.csproj",
+        "packagesPath": "C:\\Users\\tranq\\.nuget\\packages\\",
+        "outputPath": "D:\\project\\MQTT_Vilog_Malaysia_No_Check_Imei\\MQTT_Vilog_Malaysia\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\tranq\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.200"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Google.Apis": {
+              "target": "Package",
+              "version": "[1.72.0, )"
+            },
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.72.0, )"
+            },
+            "Google.Apis.Core": {
+              "target": "Package",
+              "version": "[1.72.0, )"
+            },
+            "MQTTnet": {
+              "target": "Package",
+              "version": "[5.0.1.1416, )"
+            },
+            "MQTTnet.Extensions.TopicTemplate": {
+              "target": "Package",
+              "version": "[5.0.1.1416, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Configuration.Binder": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Configuration.EnvironmentVariables": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.2, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

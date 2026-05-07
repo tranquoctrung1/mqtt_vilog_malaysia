@@ -62,7 +62,7 @@ namespace MQTT_Vilog_Malaysia.Actions
             return true;
         }
 
-        public string GetAccessToken(string serviceAccountKeyFilePath, string[] scopes)
+        public virtual string GetAccessToken(string serviceAccountKeyFilePath, string[] scopes)
         {
             GoogleCredential credential;
 
@@ -79,7 +79,7 @@ namespace MQTT_Vilog_Malaysia.Actions
             return token;
         }
 
-        public void PushNotification(string accessToken, List<string> fcmToken, string titleNoti, string bodyNoti)
+        public virtual void PushNotification(string accessToken, List<string> fcmToken, string titleNoti, string bodyNoti)
         {
             for (int i = 0; i < fcmToken.Count; i++)
             {
