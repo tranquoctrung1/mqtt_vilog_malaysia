@@ -14,6 +14,13 @@ namespace MQTT_Vilog_Malaysia.Actions
 {
     public class CheckImeiAvailableAction: IDisposable
     {
+        // HttpClient is meant to be shared and reused. Creating one per call (per message)
+        // leaks sockets and exhausts ephemeral ports under load. Single static instance.
+        private static readonly HttpClient _http = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(10)
+        };
+
         public async Task<int> CheckImeiAvailable(string imei, string url)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
@@ -21,7 +28,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
             try
             {
-                using var client = new HttpClient();
+                var client = _http;
 
                 string urlGet = $"{url}/getImeiById?imei={imei}";
 
@@ -73,7 +80,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
             try
             {
-                using var client = new HttpClient();
+                var client = _http;
                 var body = new { Imei = imei, Use = true };
                 string bb = JsonSerializer.Serialize(body);
 

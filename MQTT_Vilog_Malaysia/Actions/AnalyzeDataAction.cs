@@ -26,12 +26,12 @@ namespace MQTT_Vilog_Malaysia.Actions
             {
                 List<string> reg = new List<string>();
 
-                for (int i = 2; i < realTimeString.Length; i += 8)
+                for (int i = 2; i + 8 <= realTimeString.Length; i += 8)
                 {
                     reg.Add(realTimeString.Substring(i, 8));
                 }
 
-                if (reg.Count > 0)
+                if (reg.Count >= 6)
                 {
                     double flow = convertAction.ConvertHexToDouble(reg[0]);
 
@@ -99,7 +99,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                         {
-                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarm.SiteId);
+                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarm.SiteId, alarm.Type.GetValueOrDefault());
 
                             bool isInsertAlarm = false;
 
@@ -112,7 +112,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     //{
                                     //    isInsertAlarm = true;
                                     //}
-                                    if(his.Type != alarm.Type)
+                                    if ((alarm.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -157,7 +157,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 }
 
                 // insert alarm for battery 
-                if(battery <= 3.5)
+                if(battery > 0 && battery <= 3.5)
                 {
                     HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
                     alarmBattery.SiteId = siteid;
@@ -182,7 +182,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                     {
-                        HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmBattery.SiteId);
+                        HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarmBattery.SiteId, alarmBattery.Type.GetValueOrDefault());
 
                         bool isInsertAlarm = false;
 
@@ -195,7 +195,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                 //{
                                 //    isInsertAlarm = true;
                                 //}
-                                if (his.Type != alarmBattery.Type)
+                                if ((alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
                                 {
                                     isInsertAlarm = true;
                                 }
@@ -237,7 +237,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 }
 
                 // insert alarm for signal
-                if (signal < 20)
+                if (signal > 0 && signal < 20)
                 {
                     HistoryAlarmModel alarmSignal = new HistoryAlarmModel();
                     alarmSignal.SiteId = siteid;
@@ -253,7 +253,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                     {
-                        HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmSignal.SiteId);
+                        HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarmSignal.SiteId, alarmSignal.Type.GetValueOrDefault());
 
                         bool isInsertAlarm = false;
 
@@ -267,7 +267,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                 //    isInsertAlarm = true;
                                 //}
 
-                                if (his.Type != alarmSignal.Type)
+                                if ((alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
                                 {
                                     isInsertAlarm = true;
                                 }
@@ -328,9 +328,14 @@ namespace MQTT_Vilog_Malaysia.Actions
                 {
                     List<string> data = JsonSerializer.Deserialize<List<string>>(d.Value.GetRawText());
 
+                    if (data == null || data.Count < 2)
+                    {
+                        continue;
+                    }
+
                     List<string> reg = new List<string>();
 
-                    for (int i = 2; i < data[0].Length; i += 8)
+                    for (int i = 2; i + 8 <= data[0].Length; i += 8)
                     {
                         reg.Add(data[0].Substring(i, 8));
                     }
@@ -339,7 +344,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     LogKronheModel log = new LogKronheModel();
 
-                    if (reg.Count > 0)
+                    if (reg.Count >= 6)
                     {
                         double flow = convertAction.ConvertHexToDouble(reg[0]);
 
@@ -383,12 +388,12 @@ namespace MQTT_Vilog_Malaysia.Actions
             {
                 List<string> reg = new List<string>();
 
-                for (int i = 2; i < realTimeString.Length; i += 4)
+                for (int i = 2; i + 4 <= realTimeString.Length; i += 4)
                 {
                     reg.Add(realTimeString.Substring(i, 4));
                 }
 
-                if (reg.Count > 0)
+                if (reg.Count >= 14)
                 {
 
                     int direction = 0;
@@ -570,7 +575,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         using(HistoryAlarmAction historyAlarmAction  = new HistoryAlarmAction())
                         {
-                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarm.SiteId);
+                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarm.SiteId, alarm.Type.GetValueOrDefault());
 
                             bool isInsertAlarm = false;
 
@@ -579,7 +584,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                 if (his.TimeStampAlarm != null)
                                 {
                                    
-                                    if(his.Type != alarm.Type)
+                                    if ((alarm.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -619,7 +624,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     }
 
                     // insert alarm for battery 
-                    if (battery <= 3.5)
+                    if (battery > 0 && battery <= 3.5)
                     {
                         HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
                         alarmBattery.SiteId = siteid;
@@ -644,7 +649,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                         {
-                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmBattery.SiteId);
+                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarmBattery.SiteId, alarmBattery.Type.GetValueOrDefault());
 
                             bool isInsertAlarm = false;
 
@@ -657,7 +662,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     //{
                                     //    isInsertAlarm = true;
                                     //}
-                                    if(his.Type != alarmBattery.Type)
+                                    if ((alarmBattery.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -699,7 +704,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     }
 
                     // insert alarm for signal
-                    if (signal < 20)
+                    if (signal > 0 && signal < 20)
                     {
                         HistoryAlarmModel alarmSignal = new HistoryAlarmModel();
                         alarmSignal.SiteId = siteid;
@@ -715,7 +720,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                         using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                         {
-                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarm(alarmSignal.SiteId);
+                            HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarmSignal.SiteId, alarmSignal.Type.GetValueOrDefault());
 
                             bool isInsertAlarm = false;
 
@@ -729,7 +734,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                                     //    isInsertAlarm = true;
                                     //}
 
-                                    if (his.Type != alarmSignal.Type)
+                                    if ((alarmSignal.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
                                     {
                                         isInsertAlarm = true;
                                     }
@@ -794,12 +799,12 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     List<string> reg = new List<string>();
 
-                    for (int i = 0; i < log.Length; i += 4)
+                    for (int i = 0; i + 4 <= log.Length; i += 4)
                     {
                         reg.Add(log.Substring(i, 4));
                     }
 
-                    if (reg.Count > 0)
+                    if (reg.Count >= 13)
                     {
 
                         int year = 0;

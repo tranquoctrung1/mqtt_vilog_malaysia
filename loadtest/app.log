@@ -1,0 +1,9 @@
+Unhandled exception. The process cannot access the file 'D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\MQTT_Vilog_Malaysia\Error\log_29_5_2026.txt' because it is being used by another process.
+MQTT disconnected. Reason=SessionTakenOver. Reconnecting...
+MQTTnet.Exceptions.MqttClientUnexpectedDisconnectReceivedException: Unexpected DISCONNECT (Reason code=SessionTakenOver) received.
+   at MQTTnet.PacketDispatcher.MqttPacketAwaitable`1.WaitOneAsync(CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.Request[TResponsePacket](MqttPacket requestPacket, CancellationToken cancellationToken)
+   at MQTTnet.MqttClient.SubscribeAsync(MqttClientSubscribeOptions options, CancellationToken cancellationToken)
+   at MQTT_Vilog_Malaysia.MQTT.Subscribe.Handle_Received_Application_Message(String host, Int32 port, String ipcheck, Int32 workerCount, Int32 queueCapacity) in D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\MQTT_Vilog_Malaysia\MQTT\Subscribe.cs:line 105
+   at Program.Main(String[] args) in D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\MQTT_Vilog_Malaysia\Program.cs:line 38
+   at Program.<Main>(String[] args)

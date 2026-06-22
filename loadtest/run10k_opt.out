@@ -1,0 +1,15 @@
+=== 1. build ===
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.36
+rm: cannot remove '/d/project/MQTT_Vilog_Malaysia_No_Check_Imei/MQTT_Vilog_Malaysia/Log/Vilog_LOADTEST_LT000000_PUB': Permission denied
+=== 2. start mosquitto (docker, port 1884) ===
+docker: Error response from daemon: Conflict. The container name "/vilog-mqtt-test" is already in use by container "01e3f4d2f681406b68f8b085d8497583b00cdd0c27fd7176ddef22875760790a". You have to remove (or rename) that container to be able to reuse that name.
+
+Run 'docker run --help' for more information
+docker run failed
+--- cleanup ---
+TOTAL_SECONDS=15

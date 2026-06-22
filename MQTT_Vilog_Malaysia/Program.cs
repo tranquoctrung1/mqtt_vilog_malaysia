@@ -35,10 +35,8 @@ internal class Program
 
         Subscribe sub = new Subscribe();
 
-        await sub.Handle_Received_Application_Message(settings.IpMQTT, int.Parse(settings.Port), settings.IpCheck);
-
-
-        Console.ReadLine();
-
+        // Handle_Received_Application_Message blocks until a shutdown signal (Ctrl+C/SIGTERM),
+        // so the app stays alive headless without relying on Console.ReadLine().
+        await sub.Handle_Received_Application_Message(settings.IpMQTT, int.Parse(settings.Port), settings.IpCheck, settings.WorkerCount, settings.QueueCapacity, settings.LogRawPayload);
     }
 }

@@ -2,12 +2,14 @@
 using MQTT_Vilog_Malaysia.Models;
 using MQTTnet;
 using MQTTnet.Extensions.TopicTemplate;
+using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace MQTT_Vilog_Malaysia.MQTT
@@ -16,30 +18,139 @@ namespace MQTT_Vilog_Malaysia.MQTT
     {
         public MqttTopicTemplate sampleTemplate = new("#");
 
-        public async Task Handle_Received_Application_Message(string host, int port, string ipcheck)
+        private bool _logRawPayload = false;
+
+        public async Task Handle_Received_Application_Message(string host, int port, string ipcheck, int workerCount = 0, int queueCapacity = 0, bool logRawPayload = false)
         {
+            _logRawPayload = logRawPayload;
             /*
              * This sample subscribes to a topic and processes the received message.
              */
+
+            // Fixed worker pool + bounded queue: avoids spawning one OS thread per message
+            // (thread/connection explosion under high device count) and applies backpressure.
+            if (workerCount <= 0) workerCount = Math.Max(4, Environment.ProcessorCount * 2);
+            if (queueCapacity <= 0) queueCapacity = 20000;
+
+            var queue = Channel.CreateBounded<(string topic, string payload)>(
+                new BoundedChannelOptions(queueCapacity)
+                {
+                    FullMode = BoundedChannelFullMode.Wait,
+                    SingleReader = false,
+                    SingleWriter = false
+                });
 
             var mqttFactory = new MqttClientFactory();
 
 
             using (var mqttClient = mqttFactory.CreateMqttClient())
             {
-                var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(host).Build();
+                // QoS1 + persistent session: stable ClientId, CleanSession=false and a session
+                // expiry so the broker QUEUES messages while this consumer is offline and
+                // redelivers them on reconnect (no loss across short outages/restarts).
+                var mqttClientOptions = new MqttClientOptionsBuilder()
+                    .WithTcpServer(host, port)
+                    .WithClientId("vilog_malaysia_subscriber")
+                    .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
+                    .WithCleanSession(false)
+                    .WithSessionExpiryInterval(3600)
+                    .Build();
 
+                // Subscribe at QoS1 (AtLeastOnce) so the broker delivers reliably and does not
+                // silently drop messages when this consumer is briefly slow. Delivery QoS =
+                // min(publish QoS, subscribe QoS), so devices must also publish at QoS1.
+                var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+                    .WithTopicFilter(f => f.WithTopic("#").WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce))
+                    .Build();
 
-                mqttClient.ApplicationMessageReceivedAsync += e =>
+                mqttClient.ApplicationMessageReceivedAsync += async e =>
                 {
-
-                    Thread t = new Thread(async () =>
+                    try
                     {
+                        string topic = e.ApplicationMessage.Topic;
+                        string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+
+                        // Enqueue for the worker pool. Awaits (backpressure) when the queue is full.
+                        await queue.Writer.WriteAsync((topic, payload));
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteLogAction wlEnqueue = new WriteLogAction();
+                        await wlEnqueue.WriteErrorLog(ex.ToString());
+                    }
+                };
+
+                // Auto-reconnect: without this the app stays "running" but deaf after any broker drop.
+                mqttClient.DisconnectedAsync += async e =>
+                {
+                    WriteLogAction wlDisc = new WriteLogAction();
+                    await wlDisc.WriteErrorLog($"MQTT disconnected. Reason={e.Reason}, Ex={e.Exception?.Message}. Reconnecting...");
+                    Console.WriteLine($"MQTT disconnected. Reason={e.Reason}. Reconnecting...");
+                    while (true)
+                    {
+                        await Task.Delay(2000);
                         try
                         {
+                            await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+                            await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+                            Console.WriteLine("MQTT reconnected and re-subscribed.");
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            await wlDisc.WriteErrorLog($"Reconnect failed: {ex.Message}");
+                        }
+                    }
+                };
 
-                            string topic = e.ApplicationMessage.Topic;
+                await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
+                await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+
+                Console.WriteLine($"MQTT client subscribed. Workers={workerCount}, QueueCapacity={queueCapacity}");
+
+                // Start the fixed worker pool draining the bounded queue
+                List<Task> workers = new List<Task>();
+                for (int w = 0; w < workerCount; w++)
+                {
+                    workers.Add(Task.Run(async () =>
+                    {
+                        await foreach (var item in queue.Reader.ReadAllAsync())
+                        {
+                            await ProcessMessageAsync(item.topic, item.payload, ipcheck);
+                        }
+                    }));
+                }
+
+                // Block until shutdown signal (Ctrl+C / SIGTERM / process exit) instead of
+                // Console.ReadLine(): works headless (Windows Service, Docker, systemd) where
+                // stdin is EOF/absent. ReadLine would return immediately there and kill the app.
+                using (var shutdown = new CancellationTokenSource())
+                {
+                    Console.CancelKeyPress += (s, e) => { e.Cancel = true; shutdown.Cancel(); };
+                    AppDomain.CurrentDomain.ProcessExit += (s, e) => shutdown.Cancel();
+
+                    Console.WriteLine("Running. Ctrl+C / SIGTERM to stop.");
+                    try
+                    {
+                        await Task.Delay(Timeout.Infinite, shutdown.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // expected on shutdown
+                    }
+                }
+
+                Console.WriteLine("Shutting down: draining queue...");
+                queue.Writer.Complete();
+                await Task.WhenAll(workers);
+            }
+        }
+
+        private async Task ProcessMessageAsync(string topic, string payload, string ipcheck)
+        {
+            try
+            {
                             if (topic.ToLower().Trim().Contains("vilog_"))
                             {
                                 string[] splitTopic = topic.Split(new char[] { '_' }, StringSplitOptions.None);
@@ -50,8 +161,6 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                     string loggerid = splitTopic[2];
                                     string location = splitTopic[1];
 
-                                    string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-
                                     if (payload != "")
                                     {
                                         var options = new JsonSerializerOptions
@@ -61,9 +170,12 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                         var dataObjects = JsonSerializer.Deserialize<PayloadMQTTModel>(payload);
 
-                                        using (WriteJsonFileAction writeJsonFileAction = new WriteJsonFileAction())
+                                        if (_logRawPayload)
                                         {
-                                            writeJsonFileAction.WriteJsonFileAsync(topic, dataObjects);
+                                            using (WriteJsonFileAction writeJsonFileAction = new WriteJsonFileAction())
+                                            {
+                                                await writeJsonFileAction.WriteJsonFileAsync(topic, dataObjects);
+                                            }
                                         }
 
                                         if (dataObjects.IMEI != "")
@@ -82,19 +194,19 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                     if (config != null)
                                                     {
                                                         // update siteid in config vilog
-                                                        configVilogAction.UpdateConfigVilog(config.oldSiteId);
+                                                        await configVilogAction.UpdateConfigVilog(config.oldSiteId);
 
                                                         using (SiteAction siteActionUpdate = new SiteAction())
                                                         {
-                                                            siteActionUpdate.UpdateSite(config);
+                                                            await siteActionUpdate.UpdateSite(config);
                                                         }
 
                                                         using(ChannelConfigAction channelConfigAction = new ChannelConfigAction())
                                                         {
-                                                            channelConfigAction.UpdateChannelConfigVilog(config);
+                                                            await channelConfigAction.UpdateChannelConfigVilog(config);
                                                         }
 
-                                                        Thread.Sleep(5000);
+                                                        await Task.Delay(5000);
 
                                                         Public _public = new Public();
                                                         string oldTopic = $"Vilog_{config.oldLocation}_{config.oldSiteId}_SUB";
@@ -108,7 +220,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                         if(configOld != null)
                                                         {
-                                                            Thread.Sleep(5000);
+                                                            await Task.Delay(5000);
 
                                                             Public _public = new Public();
                                                             string oldTopic = $"Vilog_{configOld.oldLocation}_{configOld.oldSiteId}_SUB";
@@ -116,7 +228,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                             await _public.PublishAsync(oldTopic);
 
                                                             // update siteid in config vilog
-                                                            configVilogAction.UpdateConfigVilog(configOld.oldSiteId);
+                                                            await configVilogAction.UpdateConfigVilog(configOld.oldSiteId);
                                                         }
                                                     }
                                                 }
@@ -146,7 +258,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                             using (SiteAction siteAction = new SiteAction())
                                                             {
-                                                                siteAction.InsertSite(site);
+                                                                await siteAction.InsertSite(site);
                                                             }
 
                                                             // insert channel config
@@ -393,45 +505,40 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                             using (ChannelConfigAction channelConfigAction = new ChannelConfigAction())
                                                             {
-                                                                foreach (ChannelConfigModel channel in listChannels)
+                                                                await channelConfigAction.InsertChannelConfigsBulk(listChannels);
+                                                            }
+
+                                                            // Data/Index collections are auto-created on first insert; the TimeStamp
+                                                            // index is ensured lazily inside InsertDataLogger/InsertIndexLogger.
+                                                            // (No blocking pre-creation of 18 collections during provisioning.)
+
+                                                            if (dataObjects.Payload.Length >= 66)
+                                                            {
+                                                                string realTimeString = dataObjects.Payload.Substring(0, 66);
+
+                                                                List<string> log = new List<string>();
+
+                                                                for (int i = 66; i + 60 <= dataObjects.Payload.Length; i += 60)
                                                                 {
-                                                                    channelConfigAction.InsertChannelConfig(channel);
+                                                                    string l = dataObjects.Payload.Substring(i, 60);
+                                                                    log.Add(l);
                                                                 }
-                                                            }
 
-                                                            using (DataLoggerAction dataLoggerAction = new DataLoggerAction())
-                                                            {
-                                                                foreach (ChannelConfigModel channel in listChannels)
+                                                                using (HandleDataAction handleDataAction = new HandleDataAction())
                                                                 {
-                                                                    dataLoggerAction.CreateDataLoggerCollection(channel.ChannelId, false);
-                                                                    dataLoggerAction.CreateDataLoggerCollection(channel.ChannelId, true);
+                                                                    Console.WriteLine("Execute handle data SU Meter");
+                                                                    await handleDataAction.HandleDataSUMeter(realTimeString, log, site.LoggerId, site.SiteId, site.Location, dataObjects.signal, dataObjects.battery);
+                                                                    Console.WriteLine("Done executed handle data SU Meter");
                                                                 }
+
+                                                                checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
                                                             }
-
-                                                            string realTimeString = dataObjects.Payload.Substring(0, 66);
-
-                                                            List<string> log = new List<string>();
-
-                                                            for (int i = 66; i < dataObjects.Payload.Length; i += 60)
-                                                            {
-                                                                string l = dataObjects.Payload.Substring(i, 60);
-                                                                log.Add(l);
-                                                            }
-
-                                                            using (HandleDataAction handleDataAction = new HandleDataAction())
-                                                            {
-                                                                Console.WriteLine("Execute handle data SU Meter");
-                                                                handleDataAction.HandleDataSUMeter(realTimeString, log, site.LoggerId, site.SiteId, site.Location, dataObjects.signal, dataObjects.battery);
-                                                                Console.WriteLine("Done executed handle data SU Meter");
-                                                            }
-
-                                                            checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
                                                         }
                                                         else if (dataObjects.Payload.Length <= 50)
                                                         {
                                                             // Kronhe meter
 
-                                                            // insert site 
+                                                            // insert site
                                                             SiteModel site = new SiteModel();
                                                             site.SiteId = loggerid;
                                                             site.IMEI = dataObjects.IMEI;
@@ -448,7 +555,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                             using (SiteAction siteAction = new SiteAction())
                                                             {
-                                                                siteAction.InsertSite(site);
+                                                                await siteAction.InsertSite(site);
                                                             }
 
                                                             // insert channel 
@@ -604,20 +711,12 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                             using (ChannelConfigAction channelConfigAction = new ChannelConfigAction())
                                                             {
-                                                                foreach (ChannelConfigModel channel in listChannels)
-                                                                {
-                                                                    channelConfigAction.InsertChannelConfig(channel);
-                                                                }
+                                                                await channelConfigAction.InsertChannelConfigsBulk(listChannels);
                                                             }
 
-                                                            using (DataLoggerAction dataLoggerAction = new DataLoggerAction())
-                                                            {
-                                                                foreach (ChannelConfigModel channel in listChannels)
-                                                                {
-                                                                    dataLoggerAction.CreateDataLoggerCollection(channel.ChannelId, false);
-                                                                    dataLoggerAction.CreateDataLoggerCollection(channel.ChannelId, true);
-                                                                }
-                                                            }
+                                                            // Data/Index collections are auto-created on first insert; the TimeStamp
+                                                            // index is ensured lazily inside InsertDataLogger/InsertIndexLogger.
+                                                            // (No blocking pre-creation of 18 collections during provisioning.)
 
                                                             using (HandleDataAction handleDataAction = new HandleDataAction())
                                                             {
@@ -627,12 +726,12 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                                 if (time.Year > DateTime.Now.Year)
                                                                 {
-                                                                    handleDataAction.HandleDataKronheMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    await handleDataAction.HandleDataKronheMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
                                                                     Console.WriteLine("Done executed handle data Kronhe Meter");
                                                                 }
                                                                 else
                                                                 {
-                                                                    handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    await handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
                                                                     Console.WriteLine("Done executed handle data Kronhe Meter");
                                                                 }
                                                             }
@@ -646,21 +745,24 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                         if (dataObjects.Payload.Length > 50)
                                                         {
-                                                            string realTimeString = dataObjects.Payload.Substring(0, 66);
-
-                                                            List<string> log = new List<string>();
-
-                                                            for (int i = 66; i < dataObjects.Payload.Length; i += 60)
+                                                            if (dataObjects.Payload.Length >= 66)
                                                             {
-                                                                string l = dataObjects.Payload.Substring(i, 60);
-                                                                log.Add(l);
-                                                            }
+                                                                string realTimeString = dataObjects.Payload.Substring(0, 66);
 
-                                                            using (HandleDataAction handleDataAction = new HandleDataAction())
-                                                            {
-                                                                Console.WriteLine("Execute handle data SU Meter");
-                                                                handleDataAction.HandleDataSUMeter(realTimeString, log, site.LoggerId, site.SiteId, site.Location, dataObjects.signal, dataObjects.battery);
-                                                                Console.WriteLine("Done executed handle data SU Meter");
+                                                                List<string> log = new List<string>();
+
+                                                                for (int i = 66; i + 60 <= dataObjects.Payload.Length; i += 60)
+                                                                {
+                                                                    string l = dataObjects.Payload.Substring(i, 60);
+                                                                    log.Add(l);
+                                                                }
+
+                                                                using (HandleDataAction handleDataAction = new HandleDataAction())
+                                                                {
+                                                                    Console.WriteLine("Execute handle data SU Meter");
+                                                                    await handleDataAction.HandleDataSUMeter(realTimeString, log, site.LoggerId, site.SiteId, site.Location, dataObjects.signal, dataObjects.battery);
+                                                                    Console.WriteLine("Done executed handle data SU Meter");
+                                                                }
                                                             }
                                                         }
                                                         else if (dataObjects.Payload.Length <= 50)
@@ -673,12 +775,12 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                                                                 if(time.Year > DateTime.Now.Year )
                                                                 {
-                                                                    handleDataAction.HandleDataKronheMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    await handleDataAction.HandleDataKronheMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
                                                                     Console.WriteLine("Done executed handle data Kronhe Meter");
                                                                 }
                                                                 else
                                                                 {
-                                                                    handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                                    await handleDataAction.HandleDataKronheMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
                                                                     Console.WriteLine("Done executed handle data Kronhe Meter");
                                                                 }
                                                             }
@@ -698,29 +800,10 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                 }
                             }
                         }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    });
-                    t.IsBackground = true;
-                    t.Start();
-
-                    return Task.CompletedTask;
-                };
-
-                await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-
-                //var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder().WithTopicTemplate(sampleTemplate.WithParameter("id", "2")).Build();
-                var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder().WithTopicTemplate(sampleTemplate).Build();
-
-                await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-
-                Console.WriteLine("MQTT client subscribed to topic.");
-
-                Console.WriteLine("Press enter to exit.");
-
-                Console.ReadLine();
+            catch (Exception ex)
+            {
+                WriteLogAction writeLogAction = new WriteLogAction();
+                await writeLogAction.WriteErrorLog(ex.ToString());
             }
         }
     }

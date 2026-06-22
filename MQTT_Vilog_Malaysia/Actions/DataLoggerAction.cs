@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MQTT_Vilog_Malaysia.ConnectDB;
 using MQTT_Vilog_Malaysia.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,11 @@ namespace MQTT_Vilog_Malaysia.Actions
     {
 
         private bool disposed = false;
+
+        // Remember collections we've already ensured (index created) this process,
+        // so repeat messages skip the round-trip entirely.
+        private static readonly ConcurrentDictionary<string, bool> _ensuredCollections
+            = new ConcurrentDictionary<string, bool>();
         public void Dispose()
         {
             Dispose(true);
@@ -41,37 +47,30 @@ namespace MQTT_Vilog_Malaysia.Actions
             Dispose(false);
         }
 
-        public async void CreateDataLoggerCollection(string channelid, bool isIndex)
+        public async Task CreateDataLoggerCollection(string channelid, bool isIndex)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
 
+            string collectionName = isIndex ? $"t_Index_Logger_{channelid}" : $"t_Data_Logger_{channelid}";
+
+            // Already ensured this process -> skip (no DB round-trip)
+            if (_ensuredCollections.ContainsKey(collectionName))
+            {
+                return;
+            }
 
             try
             {
-
                 Connect connect = new Connect();
 
-                string collectionName = $"t_Data_Logger_{channelid}";
-                if (isIndex) {
-                    collectionName = $"t_Index_Logger_{channelid}";
-                }
+                var collection = connect.db.GetCollection<DataLoggerModel>(collectionName);
 
-                var filter = new BsonDocument(collectionName, collectionName);
-                var collections = await connect.db.ListCollectionNamesAsync(new ListCollectionNamesOptions { Filter = filter});
+                // CreateOne auto-creates the collection if missing and is idempotent if the
+                // index already exists. Removes the expensive ListCollectionNames + CreateCollection.
+                var indexKeys = Builders<DataLoggerModel>.IndexKeys.Ascending("TimeStamp");
+                await collection.Indexes.CreateOneAsync(new CreateIndexModel<DataLoggerModel>(indexKeys));
 
-                var exists = await collections.AnyAsync();
-
-                if(!exists)
-                {
-                    await connect.db.CreateCollectionAsync(collectionName);
-
-                    var collection = connect.db.GetCollection<DataLoggerModel>(collectionName);
-
-                    var indexKeys = Builders<DataLoggerModel>.IndexKeys.Ascending("TimeStamp");
-                    var indexModel = new CreateIndexModel<DataLoggerModel>(indexKeys);
-                    await collection.Indexes.CreateOneAsync(indexModel);
-                }
-                
+                _ensuredCollections[collectionName] = true;
             }
             catch (Exception ex)
             {
@@ -340,6 +339,20 @@ namespace MQTT_Vilog_Malaysia.Actions
             return value;
         }
 
+        // Ensure the TimeStamp index exists for a collection, once per process (cached).
+        // Insert auto-creates the collection; this adds the index lazily on first write.
+        private async Task EnsureIndex(IMongoCollection<DataLoggerModel> collection, string collectionName)
+        {
+            if (_ensuredCollections.ContainsKey(collectionName)) return;
+            try
+            {
+                var keys = Builders<DataLoggerModel>.IndexKeys.Ascending("TimeStamp");
+                await collection.Indexes.CreateOneAsync(new CreateIndexModel<DataLoggerModel>(keys));
+            }
+            catch { /* index race / already exists - ignore */ }
+            _ensuredCollections[collectionName] = true;
+        }
+
         public async Task<int> InsertDataLogger(List<DataLoggerModel> list, string channelid)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
@@ -349,9 +362,11 @@ namespace MQTT_Vilog_Malaysia.Actions
             {
                 Connect connect = new Connect();
 
-                var collection = connect.db.GetCollection<DataLoggerModel>("t_Data_Logger_" + channelid);
+                string name = "t_Data_Logger_" + channelid;
+                var collection = connect.db.GetCollection<DataLoggerModel>(name);
+                await EnsureIndex(collection, name);
 
-                collection.InsertMany(list);
+                await collection.InsertManyAsync(list);
 
                 nRows = list.Count;
             }
@@ -372,9 +387,11 @@ namespace MQTT_Vilog_Malaysia.Actions
             {
                 Connect connect = new Connect();
 
-                var collection = connect.db.GetCollection<DataLoggerModel>("t_Index_Logger_" + channelid);
+                string name = "t_Index_Logger_" + channelid;
+                var collection = connect.db.GetCollection<DataLoggerModel>(name);
+                await EnsureIndex(collection, name);
 
-                collection.InsertMany(list);
+                await collection.InsertManyAsync(list);
 
                 nRows = list.Count;
             }

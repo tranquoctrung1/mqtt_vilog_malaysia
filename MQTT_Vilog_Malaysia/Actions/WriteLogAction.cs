@@ -8,6 +8,12 @@ namespace MQTT_Vilog_Malaysia.Actions
 {
     public class WriteLogAction
     {
+        // Serialize writes to each log file across all threads/instances.
+        // Without this, concurrent appends from many workers throw
+        // "file is being used by another process".
+        private static readonly System.Threading.SemaphoreSlim _errorLock = new System.Threading.SemaphoreSlim(1, 1);
+        private static readonly System.Threading.SemaphoreSlim _runLock = new System.Threading.SemaphoreSlim(1, 1);
+
         string ErrorPathDir { get; set; }
         string ErrorPathFile { get; set; }
         string RunPathDir { get; set; }
@@ -144,14 +150,17 @@ namespace MQTT_Vilog_Malaysia.Actions
         {
             try
             {
-                CreateErrorLogDir();
-                CreateErrorFile();
+                CreateErrorLogDir(); // AppendAllText creates the file; no leaking File.Create handle
 
-                using StreamWriter file = new(ErrorPathFile, append: true);
-
-                await file.WriteLineAsync(message);
-
-                file.Close();
+                await _errorLock.WaitAsync();
+                try
+                {
+                    await File.AppendAllTextAsync(ErrorPathFile, message + Environment.NewLine);
+                }
+                finally
+                {
+                    _errorLock.Release();
+                }
             }
             catch (Exception ex)
             {
@@ -164,13 +173,16 @@ namespace MQTT_Vilog_Malaysia.Actions
             try
             {
                 CreateRunLogDir();
-                CreateRunFile();
 
-                using StreamWriter file = new(RunPathFile, append: true);
-
-                await file.WriteLineAsync(message);
-
-                file.Close();
+                await _runLock.WaitAsync();
+                try
+                {
+                    await File.AppendAllTextAsync(RunPathFile, message + Environment.NewLine);
+                }
+                finally
+                {
+                    _runLock.Release();
+                }
             }
             catch (Exception ex)
             {

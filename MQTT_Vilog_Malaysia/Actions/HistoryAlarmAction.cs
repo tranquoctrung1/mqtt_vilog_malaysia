@@ -15,6 +15,34 @@ namespace MQTT_Vilog_Malaysia.Actions
     public class HistoryAlarmAction : IDisposable
     {
         private bool disposed = false;
+
+        // Create the alarm lookup index once per process (idempotent)
+        private static bool _indexEnsured = false;
+        private static readonly object _indexLock = new object();
+
+        public HistoryAlarmAction()
+        {
+            if (_indexEnsured) return;
+            lock (_indexLock)
+            {
+                if (_indexEnsured) return;
+                try
+                {
+                    Connect connect = new Connect();
+                    var collection = connect.db.GetCollection<HistoryAlarmModel>("t_History_Alarm");
+                    var keys = Builders<HistoryAlarmModel>.IndexKeys
+                        .Ascending(h => h.SiteId)
+                        .Ascending(h => h.Type)
+                        .Descending(h => h.TimeStampAlarm);
+                    collection.Indexes.CreateOne(new CreateIndexModel<HistoryAlarmModel>(keys));
+                }
+                catch
+                {
+                    // Index creation failure must not block alarm processing
+                }
+                _indexEnsured = true;
+            }
+        }
         public void Dispose()
         {
             Dispose(true);
@@ -51,8 +79,8 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                 Connect connect = new Connect();
                 var collection = connect.db.GetCollection<HistoryAlarmModel>("t_History_Alarm");
-                list = collection.FindAsync(_ => true).Result.ToList();
-                
+                list = await collection.Find(_ => true).ToListAsync();
+
             }
             catch (Exception ex)
             {
@@ -71,8 +99,35 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                 Connect connect = new Connect();
                 var collection = connect.db.GetCollection<HistoryAlarmModel>("t_History_Alarm");
-                el = collection.FindAsync(h => h.SiteId == siteid).Result.ToList().OrderByDescending(h => h.TimeStampAlarm).FirstOrDefault();
+                // Server-side sort + limit 1 (uses index) instead of loading all docs into RAM
+                el = await collection.Find(h => h.SiteId == siteid)
+                    .SortByDescending(h => h.TimeStampAlarm)
+                    .Limit(1)
+                    .FirstOrDefaultAsync();
 
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+
+            return el;
+        }
+
+        // Latest alarm of a specific type for a site — used to de-duplicate per alarm source
+        public async Task<HistoryAlarmModel> GetLatestAlarmByType(string siteid, int type)
+        {
+            HistoryAlarmModel el = null;
+            WriteLogAction writeLogAction = new WriteLogAction();
+            try
+            {
+                Connect connect = new Connect();
+                var collection = connect.db.GetCollection<HistoryAlarmModel>("t_History_Alarm");
+                // Server-side sort + limit 1 (uses index) instead of loading all docs into RAM
+                el = await collection.Find(h => h.SiteId == siteid && h.Type == type)
+                    .SortByDescending(h => h.TimeStampAlarm)
+                    .Limit(1)
+                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

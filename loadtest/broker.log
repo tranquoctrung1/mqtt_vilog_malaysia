@@ -1,0 +1,15 @@
+WARNING:amqtt.contexts:sys_interval is deprecated, use 'plugins' to define configuration
+WARNING:amqtt.contexts:'auth' and 'topic-check' are deprecated, use 'plugins' to define configuration
+D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\broker.py:21: DeprecationWarning: Loading plugins from EntryPoints is deprecated and will be removed in a future version. Use `plugins` section of config instead.
+  broker = Broker(CONFIG)
+WARNING:amqtt.broker.plugins.auth_file:Configuration parameter 'password-file' not found
+BROKER_READY
+ERROR:amqtt.broker:Invalid connection from (client @=127.0.0.1:65496)
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\amqtt\broker.py", line 477, in _initialize_client_session
+    handler, client_session = await BrokerProtocolHandler.init_from_connect(reader, writer, self.plugins_manager)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\amqtt\mqtt\protocol\broker_handler.py", line 225, in init_from_connect
+    raise MQTTError(error_msg) from None
+amqtt.errors.MQTTError: Invalid protocol from (client @=127.0.0.1:65496): 5
+WARNING:amqtt.broker:Failed to initialize client session: Invalid protocol from (client @=127.0.0.1:65496): 5

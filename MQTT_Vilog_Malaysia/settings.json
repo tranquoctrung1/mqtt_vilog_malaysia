@@ -4,7 +4,10 @@
     "DBName": "vilog_malaysia",
     "IpMQTT": "vilog.viwater.vn",
     "Port": "1883",
-    "IpCheck": "http://157.66.81.22:3005/api"
+    "IpCheck": "http://157.66.81.22:3005/api",
+    "WorkerCount": 16,
+    "QueueCapacity": 20000,
+    "LogRawPayload": false
   }
 
 }

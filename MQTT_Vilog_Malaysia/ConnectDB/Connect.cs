@@ -11,11 +11,34 @@ namespace MQTT_Vilog_Malaysia.ConnectDB
 {
     public class Connect : IDisposable
     {
+        // MongoClient is thread-safe and manages its own connection pool.
+        // It MUST be a singleton — creating one per request exhausts sockets under load.
+        private static readonly MongoClient _client;
+        private static readonly IMongoDatabase _db;
+
         public MongoClient client;
 
         public IMongoDatabase db;
 
         private bool disposed = false;
+
+        static Connect()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+              .AddJsonFile("settings.json")
+               .AddEnvironmentVariables()
+               .Build();
+
+            Settings settings = config.GetRequiredSection("Settings").Get<Settings>();
+
+            // Raise the connection pool so many concurrent workers don't queue on the default 100.
+            var clientSettings = MongoClientSettings.FromConnectionString(settings.Host);
+            clientSettings.MaxConnectionPoolSize = 500;
+            clientSettings.MinConnectionPoolSize = 10;
+
+            _client = new MongoClient(clientSettings);
+            _db = _client.GetDatabase(settings.DBName);
+        }
         public void Dispose()
         {
             Dispose(true);
@@ -46,16 +69,9 @@ namespace MQTT_Vilog_Malaysia.ConnectDB
 
         public Connect()
         {
-            IConfiguration config = new ConfigurationBuilder()
-              .AddJsonFile("settings.json")
-               .AddEnvironmentVariables()
-               .Build();
-
-            Settings settings = config.GetRequiredSection("Settings").Get<Settings>();
-
-            client = new MongoClient(settings.Host);
-
-            db = client.GetDatabase(settings.DBName);
+            // Reuse the shared singleton client/database — no new connection pool per instance.
+            client = _client;
+            db = _db;
         }
     }
 }

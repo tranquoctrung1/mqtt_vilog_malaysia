@@ -11,8 +11,18 @@ namespace MQTT_Vilog_Malaysia.Actions
         private bool disposed = false;
         public double ConvertHexToDouble(string hexString)
         {
-            // Convert hex to byte array (from most to least significant byte)
-            uint intValue = Convert.ToUInt32(hexString, 16);
+            // Guard: invalid/empty/wrong-length hex returns 0 instead of throwing
+            if (string.IsNullOrWhiteSpace(hexString))
+            {
+                return 0;
+            }
+
+            if (!uint.TryParse(hexString, System.Globalization.NumberStyles.HexNumber,
+                System.Globalization.CultureInfo.InvariantCulture, out uint intValue))
+            {
+                return 0;
+            }
+
             float floatValue = BitConverter.ToSingle(BitConverter.GetBytes(intValue), 0);
             return floatValue;
         }

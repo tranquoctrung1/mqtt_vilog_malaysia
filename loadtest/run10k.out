@@ -1,0 +1,193 @@
+=== 1. build ===
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.40
+=== 2. start mosquitto (docker, port 1884) ===
+broker up
+=== 3. start app (localhost, test DB=vilog_malaysia_loadtest, workers=16, queue=20000) ===
+app subscribed
+=== 4. publish 10000 kronhe messages ===
+D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py:71: DeprecationWarning: Callback API version 1 is deprecated, update to latest version
+  client = mqtt.Client(client_id=f"loadtest-{idx}", clean_session=True)
+Publishing 10000 kronhe msgs via 100 clients to 127.0.0.1:1884 (qos=1, rate=max)
+Done. sent=10000 in 5.06s => 1977 msg/s
+=== 5. wait for queue drain ===
+  t_Sites=16
+  t_Sites=32
+  t_Sites=48
+  t_Sites=48
+  t_Sites=64
+  t_Sites=80
+  t_Sites=80
+  t_Sites=88
+  t_Sites=96
+  t_Sites=96
+  t_Sites=97
+  t_Sites=112
+  t_Sites=128
+  t_Sites=144
+  t_Sites=161
+  t_Sites=178
+  t_Sites=199
+  t_Sites=220
+  t_Sites=233
+  t_Sites=254
+  t_Sites=272
+  t_Sites=288
+  t_Sites=304
+  t_Sites=320
+  t_Sites=325
+  t_Sites=336
+  t_Sites=336
+  t_Sites=339
+  t_Sites=352
+  t_Sites=368
+  t_Sites=369
+  t_Sites=378
+  t_Sites=384
+  t_Sites=391
+  t_Sites=401
+  t_Sites=419
+  t_Sites=436
+  t_Sites=450
+  t_Sites=463
+  t_Sites=479
+  t_Sites=495
+  t_Sites=512
+  t_Sites=529
+  t_Sites=546
+  t_Sites=562
+  t_Sites=578
+  t_Sites=595
+  t_Sites=611
+  t_Sites=627
+  t_Sites=643
+  t_Sites=648
+  t_Sites=663
+  t_Sites=676
+  t_Sites=680
+  t_Sites=696
+  t_Sites=711
+  t_Sites=711
+  t_Sites=712
+  t_Sites=722
+  t_Sites=730
+  t_Sites=744
+  t_Sites=752
+  t_Sites=764
+  t_Sites=776
+  t_Sites=777
+  t_Sites=778
+  t_Sites=782
+  t_Sites=785
+  t_Sites=796
+  t_Sites=809
+  t_Sites=816
+  t_Sites=828
+  t_Sites=840
+  t_Sites=846
+  t_Sites=858
+  t_Sites=873
+  t_Sites=889
+  t_Sites=898
+  t_Sites=910
+  t_Sites=922
+  t_Sites=930
+  t_Sites=946
+  t_Sites=960
+  t_Sites=972
+  t_Sites=973
+  t_Sites=974
+  t_Sites=975
+  t_Sites=991
+  t_Sites=1007
+  t_Sites=1022
+  t_Sites=1029
+  t_Sites=1042
+  t_Sites=1058
+  t_Sites=1074
+  t_Sites=1090
+  t_Sites=1106
+  t_Sites=1117
+  t_Sites=1130
+  t_Sites=1146
+  t_Sites=1158
+  t_Sites=1161
+  t_Sites=1166
+  t_Sites=1167
+  t_Sites=1170
+  t_Sites=1182
+  t_Sites=1190
+  t_Sites=1200
+  t_Sites=1206
+  t_Sites=1206
+  t_Sites=1214
+  t_Sites=1228
+  t_Sites=1239
+  t_Sites=1247
+  t_Sites=1261
+  t_Sites=1264
+  t_Sites=1274
+  t_Sites=1280
+  t_Sites=1294
+  t_Sites=1299
+  t_Sites=1312
+  t_Sites=1320
+  t_Sites=1332
+  t_Sites=1344
+  t_Sites=1351
+  t_Sites=1355
+  t_Sites=1360
+  t_Sites=1368
+  t_Sites=1379
+  t_Sites=1385
+  t_Sites=1395
+  t_Sites=1401
+  t_Sites=1411
+  t_Sites=1420
+  t_Sites=1421
+  t_Sites=1421
+  t_Sites=1426
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+  t_Sites=1428
+stalled at 1428 (stable)
+=== 6. results ===
+Peak app RAM=103MB, peak Threads=37
+DB: vilog_malaysia_loadtest
+  t_Sites:                 1428
+  t_Channel_Configurations:12847
+  t_Data_Logger_* colls:   12780
+  t_Index_Logger_* colls:  12775
+  t_History_Alarm docs:    0
+  data docs (first 200 colls): 199
+--- app memory / threads (find dotnet running our dll) ---
+--- app error log tail ---
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+
+Test DB 'vilog_malaysia_loadtest' kept for inspection. Drop with:
+  python loadtest/verify_mongo.py --db vilog_malaysia_loadtest --drop
+--- cleanup ---

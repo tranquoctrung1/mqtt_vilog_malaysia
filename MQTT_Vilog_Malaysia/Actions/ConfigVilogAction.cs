@@ -62,7 +62,7 @@ namespace MQTT_Vilog_Malaysia.Actions
             return el;
         }
 
-        public async void UpdateConfigVilog(string oldSiteId)
+        public async Task UpdateConfigVilog(string oldSiteId)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
 

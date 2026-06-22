@@ -1,0 +1,1481 @@
+=== 1. build ===
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.79
+=== 2. start mosquitto (docker, port 1884) ===
+broker up
+=== 3. start app (localhost, test DB=vilog_malaysia_loadtest, workers=16, queue=20000) ===
+=== 4. publish 2000 kronhe messages ===
+D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py:71: DeprecationWarning: Callback API version 1 is deprecated, update to latest version
+  client = mqtt.Client(client_id=f"loadtest-{idx}", clean_session=True)
+Exception in thread Thread-25 (worker):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-4 (worker):
+Exception in thread Thread-16 (worker):
+Exception in thread Thread-15 (worker):
+Exception in thread Thread-13 (worker):
+Exception in thread Thread-21 (worker):
+Exception in thread Thread-23 (worker):
+Exception in thread Thread-6 (worker):
+Traceback (most recent call last):
+Exception in thread Thread-12 (worker):
+Exception in thread Thread-8 (worker):
+Exception in thread Thread-22 (worker):
+Exception in thread Thread-24 (worker):
+Traceback (most recent call last):
+Exception in thread Thread-20 (worker):
+Exception in thread Thread-3 (worker):
+Exception in thread Thread-17 (worker):
+Exception in thread Thread-10 (worker):
+Exception in thread Thread-2 (worker):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-14 (worker):
+Exception in thread Thread-7 (worker):
+Exception in thread Thread-19 (worker):
+Exception in thread Thread-5 (worker):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Exception in thread Thread-11 (worker):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-9 (worker):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-1 (worker):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Exception in thread Thread-18 (worker):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-41 (worker):
+Exception in thread Thread-28 (worker):
+Exception in thread Thread-37 (worker):
+Exception in thread Thread-32 (worker):
+Exception in thread Thread-34 (worker):
+Exception in thread Thread-29 (worker):
+Exception in thread Thread-40 (worker):
+Traceback (most recent call last):
+Exception in thread Thread-44 (worker):
+Exception in thread Thread-30 (worker):
+Exception in thread Thread-46 (worker):
+Exception in thread Thread-26 (worker):
+Exception in thread Thread-49 (worker):
+Traceback (most recent call last):
+Exception in thread Thread-48 (worker):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+Exception in thread Thread-31 (worker):
+Exception in thread Thread-42 (worker):
+Exception in thread Thread-47 (worker):
+Exception in thread Thread-27 (worker):
+Exception in thread Thread-50 (worker):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-43 (worker):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Exception in thread Thread-35 (worker):
+Exception in thread Thread-36 (worker):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-38 (worker):
+Exception in thread Thread-39 (worker):
+Traceback (most recent call last):
+Exception in thread Thread-45 (worker):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Exception in thread Thread-33 (worker):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+Traceback (most recent call last):
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+    self.run()
+    self.run()
+    self.run()
+    self._target(*self._args, **self._kwargs)
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+    self.run()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self.run()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    self.run()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._target(*self._args, **self._kwargs)
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    return self.reconnect()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    self._target(*self._args, **self._kwargs)
+    self._target(*self._args, **self._kwargs)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    self._target(*self._args, **self._kwargs)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._target(*self._args, **self._kwargs)
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._target(*self._args, **self._kwargs)
+           ^^^^^^^^^^^^^^^^
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    client.connect(args.host, args.port, keepalive=60)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+           ^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+    return self.reconnect()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+                 ^^^^^^^^^^^^^^^^^^^^^
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    client.connect(args.host, args.port, keepalive=60)
+           ^^^^^^^^^^^^^^^^
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    client.connect(args.host, args.port, keepalive=60)
+    client.connect(args.host, args.port, keepalive=60)
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    client.connect(args.host, args.port, keepalive=60)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._target(*self._args, **self._kwargs)
+    return self.reconnect()
+                 ^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^
+    return self.reconnect()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+    return self.reconnect()
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    return self.reconnect()
+    return self.reconnect()
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^
+    return self.reconnect()
+    self._sock = self._create_socket()
+    return self.reconnect()
+  File "D:\project\MQTT_Vilog_Malaysia_No_Check_Imei\loadtest\publish_load.py", line 72, in worker
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    client.connect(args.host, args.port, keepalive=60)
+           ^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    client.connect(args.host, args.port, keepalive=60)
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+    sock = self._create_socket_connection()
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+           ^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+           ^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^
+    client.connect(args.host, args.port, keepalive=60)
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+    client.connect(args.host, args.port, keepalive=60)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    sock = self._create_socket_connection()
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+    self._sock = self._create_socket()
+                 ^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    self._sock = self._create_socket()
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    return self.reconnect()
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+                 ^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+    self._sock = self._create_socket()
+    sock = self._create_socket_connection()
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+                 ^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+    return self.reconnect()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1435, in connect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+    sock = self._create_socket_connection()
+    self._sock = self._create_socket()
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+                 ^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    sock = self._create_socket_connection()
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return self.reconnect()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+    return self.reconnect()
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+                 ^^^^^^^^^^^^^^^^^^^^^
+                 ^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+                 ^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+    sock = self._create_socket_connection()
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    sock = self._create_socket_connection()
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+    sock.connect(sa)
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    raise exceptions[0]
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+                 ^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+                 ^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock.connect(sa)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    raise exceptions[0]
+    self._sock = self._create_socket()
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 1598, in reconnect
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+                 ^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock = self._create_socket_connection()
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock.connect(sa)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    raise exceptions[0]
+    sock.connect(sa)
+    sock.connect(sa)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock.connect(sa)
+    sock = self._create_socket_connection()
+    raise exceptions[0]
+    sock = self._create_socket_connection()
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    raise exceptions[0]
+    raise exceptions[0]
+    sock.connect(sa)
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    sock.connect(sa)
+    raise exceptions[0]
+    sock.connect(sa)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    self._sock = self._create_socket()
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    raise exceptions[0]
+    raise exceptions[0]
+    raise exceptions[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock.connect(sa)
+    raise exceptions[0]
+                 ^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock = self._create_socket_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    raise exceptions[0]
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4609, in _create_socket
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    sock.connect(sa)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+    sock.connect(sa)
+    sock.connect(sa)
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+    sock = self._create_socket_connection()
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    raise exceptions[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\site-packages\paho\mqtt\client.py", line 4640, in _create_socket_connection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise exceptions[0]
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+    sock.connect(sa)
+    sock.connect(sa)
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock.connect(sa)
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sock.connect(sa)
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 851, in create_connection
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    raise exceptions[0]
+  File "C:\Users\tranq\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 836, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+Publishing 2000 kronhe msgs via 50 clients to 127.0.0.1:1884 (qos=1, rate=max)
+Done. sent=0 in 2.93s => 0 msg/s
+=== 5. wait for queue drain ===
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=0
+  t_Sites=16
+  t_Sites=32
+  t_Sites=47
+  t_Sites=59
+  t_Sites=75
+  t_Sites=89
+  t_Sites=105
+  t_Sites=122
+  t_Sites=140
+  t_Sites=154
+  t_Sites=169
+  t_Sites=182
+  t_Sites=189
+  t_Sites=206
+  t_Sites=219
+  t_Sites=236
+  t_Sites=250
+  t_Sites=267
+  t_Sites=282
+  t_Sites=295
+  t_Sites=310
+  t_Sites=311
+  t_Sites=320
+  t_Sites=323
+  t_Sites=330
+  t_Sites=339
+  t_Sites=349
+  t_Sites=361
+  t_Sites=371
+  t_Sites=381
+  t_Sites=394
+  t_Sites=404
+  t_Sites=413
+  t_Sites=423
+  t_Sites=438
+  t_Sites=438
+  t_Sites=442
+  t_Sites=448
+  t_Sites=457
+  t_Sites=469
+  t_Sites=483
+  t_Sites=501
+  t_Sites=510
+  t_Sites=524
+  t_Sites=540
+  t_Sites=556
+  t_Sites=569
+  t_Sites=580
+  t_Sites=590
+  t_Sites=604
+  t_Sites=619
+  t_Sites=630
+  t_Sites=645
+  t_Sites=662
+  t_Sites=673
+  t_Sites=686
+  t_Sites=702
+  t_Sites=712
+  t_Sites=720
+  t_Sites=731
+  t_Sites=745
+  t_Sites=756
+  t_Sites=770
+  t_Sites=781
+  t_Sites=794
+  t_Sites=805
+  t_Sites=814
+  t_Sites=823
+  t_Sites=824
+  t_Sites=832
+  t_Sites=835
+  t_Sites=845
+  t_Sites=862
+  t_Sites=869
+  t_Sites=883
+  t_Sites=886
+  t_Sites=894
+  t_Sites=904
+  t_Sites=914
+  t_Sites=923
+  t_Sites=935
+  t_Sites=935
+  t_Sites=935
+  t_Sites=939
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+  t_Sites=946
+stalled at 946 (stable)
+=== 6. results ===
+Peak app RAM=99MB, peak Threads=39
+DB: vilog_malaysia_loadtest
+  t_Sites:                 946
+  t_Channel_Configurations:8514
+  t_Data_Logger_* colls:   8497
+  t_Index_Logger_* colls:  8497
+  t_History_Alarm docs:    0
+  data docs (first 200 colls): 199
+--- app memory / threads (find dotnet running our dll) ---
+--- app error log tail ---
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+No connection could be made because the target machine actively refused it. (127.0.0.1:9)
+
+Test DB 'vilog_malaysia_loadtest' kept for inspection. Drop with:
+  python loadtest/verify_mongo.py --db vilog_malaysia_loadtest --drop
+--- cleanup ---
+TOTAL=1077s

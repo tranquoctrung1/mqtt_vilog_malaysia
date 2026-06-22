@@ -12,7 +12,7 @@ namespace MQTT_Vilog_Malaysia.Actions
     {
         private bool disposed = false;
 
-        public async void HandleDataKronheMeter(string stringRealTime, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
+        public async Task HandleDataKronheMeter(string stringRealTime, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
             AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
@@ -29,7 +29,10 @@ namespace MQTT_Vilog_Malaysia.Actions
                 ChannelConfigModel channelForward = channelConfig.Where(c => c.ForwardFlow == true).FirstOrDefault();
                 ChannelConfigModel channelReverse = channelConfig.Where(c => c.ReverseFlow == true).FirstOrDefault();
 
-                if (channelForward.ChannelId != "")
+                // Collect all channel-config value/index updates and flush in ONE BulkWrite.
+                var chUpdates = new List<(string channelId, DataLoggerModel value, bool isIndex)>();
+
+                if (channelForward != null && !string.IsNullOrEmpty(channelForward.ChannelId))
                 {
                     DataLoggerModel dataUpdate = new DataLoggerModel();
                     dataUpdate.Value = Math.Round(realtimeData.ForwardFlow, 2);
@@ -39,8 +42,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                     dataUpdateIndex.Value = Math.Round(realtimeData.ForwardIndex, 2);
                     dataUpdateIndex.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
-                    await channelConfigAction.UpdateValueAction(channelForward.ChannelId, dataUpdate);
-                    await channelConfigAction.UpdateIndexValueAction(channelForward.ChannelId, dataUpdateIndex);
+                    chUpdates.Add((channelForward.ChannelId, dataUpdate, false));
+                    chUpdates.Add((channelForward.ChannelId, dataUpdateIndex, true));
 
                     if (logs.Count > 0)
                     {
@@ -66,7 +69,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     }
                 }
-                if (channelReverse.ChannelId != "")
+                if (channelReverse != null && !string.IsNullOrEmpty(channelReverse.ChannelId))
                 {
 
                     DataLoggerModel dataUpdate = new DataLoggerModel();
@@ -77,8 +80,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                     dataUpdateIndex.Value = Math.Round(realtimeData.ReverseIndex, 2);
                     dataUpdateIndex.TimeStamp = realtimeData.TimeStamp.AddHours(8);
 
-                    await channelConfigAction.UpdateValueAction(channelReverse.ChannelId, dataUpdate);
-                    await channelConfigAction.UpdateIndexValueAction(channelReverse.ChannelId, dataUpdateIndex);
+                    chUpdates.Add((channelReverse.ChannelId, dataUpdate, false));
+                    chUpdates.Add((channelReverse.ChannelId, dataUpdateIndex, true));
 
                     if (logs.Count > 0)
                     {
@@ -141,13 +144,15 @@ namespace MQTT_Vilog_Malaysia.Actions
                 dataSignal.Value = signal;
                 dataSignal.TimeStamp = DateTime.Now.AddHours(8);
 
-                await channelConfigAction.UpdateValueAction($"{imei}_98", dataUpdateForwardTotal);
-                await channelConfigAction.UpdateValueAction($"{imei}_99", dataUpdateReverseTotal);
-                await channelConfigAction.UpdateValueAction($"{imei}_100", dataUpdateNetTotal);
-                await channelConfigAction.UpdateValueAction($"{imei}_101", dataUpdateAlarm);
-                await channelConfigAction.UpdateValueAction($"{imei}_05", dataBattery);
-                await channelConfigAction.UpdateValueAction($"{imei}_06", dataBatteryCapacity);
-                await channelConfigAction.UpdateValueAction($"{imei}_07", dataSignal);
+                chUpdates.Add(($"{imei}_98", dataUpdateForwardTotal, false));
+                chUpdates.Add(($"{imei}_99", dataUpdateReverseTotal, false));
+                chUpdates.Add(($"{imei}_100", dataUpdateNetTotal, false));
+                chUpdates.Add(($"{imei}_101", dataUpdateAlarm, false));
+                chUpdates.Add(($"{imei}_05", dataBattery, false));
+                chUpdates.Add(($"{imei}_06", dataBatteryCapacity, false));
+                chUpdates.Add(($"{imei}_07", dataSignal, false));
+
+                await channelConfigAction.BulkUpdateValues(chUpdates);
 
 
                 //insert data logger for battery channel
@@ -211,7 +216,7 @@ namespace MQTT_Vilog_Malaysia.Actions
             }
         }
 
-        public async void HandleDataKronheMeterOverTime(string stringRealTime, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
+        public async Task HandleDataKronheMeterOverTime(string stringRealTime, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
             AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
@@ -231,7 +236,10 @@ namespace MQTT_Vilog_Malaysia.Actions
                 DateTime now = DateTime.Now.AddHours(8);
                 DateTime realtime = realtimeData.TimeStamp.AddHours(8);
 
-                if (channelForward.ChannelId != "")
+                // Collect all channel-config value/index updates and flush in ONE BulkWrite.
+                var chUpdates = new List<(string channelId, DataLoggerModel value, bool isIndex)>();
+
+                if (channelForward != null && !string.IsNullOrEmpty(channelForward.ChannelId))
                 {
                     DataLoggerModel dataUpdate = new DataLoggerModel();
                     dataUpdate.Value = Math.Round(realtimeData.ForwardFlow, 2);
@@ -241,8 +249,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                     dataUpdateIndex.Value = Math.Round(realtimeData.ForwardIndex, 2);
                     dataUpdateIndex.TimeStamp = DateTime.Now.AddHours(8);
 
-                    await channelConfigAction.UpdateValueAction(channelForward.ChannelId, dataUpdate);
-                    await channelConfigAction.UpdateIndexValueAction(channelForward.ChannelId, dataUpdateIndex);
+                    chUpdates.Add((channelForward.ChannelId, dataUpdate, false));
+                    chUpdates.Add((channelForward.ChannelId, dataUpdateIndex, true));
 
                     if (logs.Count > 0)
                     {
@@ -259,7 +267,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                             totalSecondDiff = Math.Abs((timeLog1 - timeLog2).TotalSeconds);
                         }
 
-                        DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward.ChannelId);
+                        DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward?.ChannelId ?? "");
 
                         foreach (var item in logs)
                         {
@@ -301,7 +309,7 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     }
                 }
-                if (channelReverse.ChannelId != "")
+                if (channelReverse != null && !string.IsNullOrEmpty(channelReverse.ChannelId))
                 {
 
                     DataLoggerModel dataUpdate = new DataLoggerModel();
@@ -312,8 +320,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                     dataUpdateIndex.Value = Math.Round(realtimeData.ReverseIndex, 2);
                     dataUpdateIndex.TimeStamp = DateTime.Now.AddHours(8);
 
-                    await channelConfigAction.UpdateValueAction(channelReverse.ChannelId, dataUpdate);
-                    await channelConfigAction.UpdateIndexValueAction(channelReverse.ChannelId, dataUpdateIndex);
+                    chUpdates.Add((channelReverse.ChannelId, dataUpdate, false));
+                    chUpdates.Add((channelReverse.ChannelId, dataUpdateIndex, true));
 
                     if (logs.Count > 0)
                     {
@@ -330,7 +338,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                             totalSecondDiff = Math.Abs((timeLog1 - timeLog2).TotalSeconds);
                         }
 
-                        DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward.ChannelId);
+                        DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger(channelForward?.ChannelId ?? "");
 
 
                         foreach (var item in logs)
@@ -409,13 +417,15 @@ namespace MQTT_Vilog_Malaysia.Actions
                 dataSignal.Value = signal;
                 dataSignal.TimeStamp = DateTime.Now.AddHours(8);
 
-                await channelConfigAction.UpdateValueAction($"{imei}_98", dataUpdateForwardTotal);
-                await channelConfigAction.UpdateValueAction($"{imei}_99", dataUpdateReverseTotal);
-                await channelConfigAction.UpdateValueAction($"{imei}_100", dataUpdateNetTotal);
-                await channelConfigAction.UpdateValueAction($"{imei}_101", dataUpdateAlarm);
-                await channelConfigAction.UpdateValueAction($"{imei}_05", dataBattery);
-                await channelConfigAction.UpdateValueAction($"{imei}_06", dataBatteryCapacity);
-                await channelConfigAction.UpdateValueAction($"{imei}_07", dataSignal);
+                chUpdates.Add(($"{imei}_98", dataUpdateForwardTotal, false));
+                chUpdates.Add(($"{imei}_99", dataUpdateReverseTotal, false));
+                chUpdates.Add(($"{imei}_100", dataUpdateNetTotal, false));
+                chUpdates.Add(($"{imei}_101", dataUpdateAlarm, false));
+                chUpdates.Add(($"{imei}_05", dataBattery, false));
+                chUpdates.Add(($"{imei}_06", dataBatteryCapacity, false));
+                chUpdates.Add(($"{imei}_07", dataSignal, false));
+
+                await channelConfigAction.BulkUpdateValues(chUpdates);
 
 
                 //insert data logger for battery channel
@@ -515,7 +525,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 await writeLogAction.WriteErrorLog(ex.Message);
             }
         }
-        public async void HandleDataSUMeter(string stringRealTime, List<string> logData, string imei, string siteid, string location, int signal, double battery)
+        public async Task HandleDataSUMeter(string stringRealTime, List<string> logData, string imei, string siteid, string location, int signal, double battery)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
             AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
@@ -528,8 +538,11 @@ namespace MQTT_Vilog_Malaysia.Actions
                 RealTimeModel real = await analyzeDataAction.AnalyzeDataRealTimeSUMeter(stringRealTime, siteid, location, imei, signal, battery);
                 List<ChannelConfigModel> channel = await channelConfigAction.GetChannelByLoggerId(imei);
 
-                string channelForward = channel.Where(c => c.ForwardFlow == true).FirstOrDefault().ChannelId;
-                string channelReverse = channel.Where(c => c.ReverseFlow == true).FirstOrDefault().ChannelId;
+                string channelForward = channel.Where(c => c.ForwardFlow == true).FirstOrDefault()?.ChannelId ?? "";
+                string channelReverse = channel.Where(c => c.ReverseFlow == true).FirstOrDefault()?.ChannelId ?? "";
+
+                // Collect all channel-config value/index updates and flush in ONE BulkWrite.
+                var chUpdates = new List<(string channelId, DataLoggerModel value, bool isIndex)>();
 
                 if (real != null)
                 {
@@ -543,10 +556,9 @@ namespace MQTT_Vilog_Malaysia.Actions
                         index.TimeStamp = real.TimeStamp.AddHours(8);
                         index.Value = real.ForwardIndex;
 
-                        await channelConfigAction.UpdateValueAction(channelForward, data);
-                        await channelConfigAction.UpdateIndexValueAction(channelForward, index);
-
-                        await channelConfigAction.UpdateValueAction($"{imei}_98", index);
+                        chUpdates.Add((channelForward, data, false));
+                        chUpdates.Add((channelForward, index, true));
+                        chUpdates.Add(($"{imei}_98", index, false));
                     }
                     if (channelReverse != "")
                     {
@@ -558,17 +570,16 @@ namespace MQTT_Vilog_Malaysia.Actions
                         index.TimeStamp = real.TimeStamp.AddHours(8);
                         index.Value = real.ReverseIndex;
 
-                        await channelConfigAction.UpdateValueAction(channelReverse, data);
-                        await channelConfigAction.UpdateIndexValueAction(channelReverse, index);
-
-                        await channelConfigAction.UpdateValueAction($"{imei}_99", index);
+                        chUpdates.Add((channelReverse, data, false));
+                        chUpdates.Add((channelReverse, index, true));
+                        chUpdates.Add(($"{imei}_99", index, false));
                     }
 
 
                     DataLoggerModel datamodbus = new DataLoggerModel();
                     datamodbus.TimeStamp = real.TimeStamp.AddHours(8);
                     datamodbus.Value = real.ModbusPowerSupplyDown;
-                    await channelConfigAction.UpdateValueAction($"{imei}_100", datamodbus);
+                    chUpdates.Add(($"{imei}_100", datamodbus, false));
                     List<DataLoggerModel> t = new List<DataLoggerModel>();
                     t.Add(datamodbus);
                     await dataLoggerAction.InsertDataLogger(t, $"{imei}_100");
@@ -576,7 +587,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataMemory = new DataLoggerModel();
                     dataMemory.TimeStamp = real.TimeStamp.AddHours(8);
                     dataMemory.Value = real.MemoryError;
-                    await channelConfigAction.UpdateValueAction($"{imei}_101", dataMemory);
+                    chUpdates.Add(($"{imei}_101", dataMemory, false));
                     List<DataLoggerModel> t2 = new List<DataLoggerModel>();
                     t2.Add(dataMemory);
                     await dataLoggerAction.InsertDataLogger(t2, $"{imei}_101");
@@ -584,7 +595,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataLowTransmitter = new DataLoggerModel();
                     dataLowTransmitter.TimeStamp = real.TimeStamp.AddHours(8);
                     dataLowTransmitter.Value = real.LowTransmitterVoltage;
-                    await channelConfigAction.UpdateValueAction($"{imei}_103", dataLowTransmitter);
+                    chUpdates.Add(($"{imei}_103", dataLowTransmitter, false));
                     List<DataLoggerModel> t3 = new List<DataLoggerModel>();
                     t3.Add(dataLowTransmitter);
                     await dataLoggerAction.InsertDataLogger(t3, $"{imei}_103");
@@ -592,7 +603,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataReverse = new DataLoggerModel();
                     dataReverse.TimeStamp = real.TimeStamp.AddHours(8);
                     dataReverse.Value = real.ReverseFlowWarning;
-                    await channelConfigAction.UpdateValueAction($"{imei}_104", dataReverse);
+                    chUpdates.Add(($"{imei}_104", dataReverse, false));
                     List<DataLoggerModel> t4 = new List<DataLoggerModel>();
                     t4.Add(dataReverse);
                     await dataLoggerAction.InsertDataLogger(t4, $"{imei}_104");
@@ -600,7 +611,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataDrying = new DataLoggerModel();
                     dataDrying.TimeStamp = real.TimeStamp.AddHours(8);
                     dataDrying.Value = real.DryingWarning;
-                    await channelConfigAction.UpdateValueAction($"{imei}_105", dataDrying);
+                    chUpdates.Add(($"{imei}_105", dataDrying, false));
                     List<DataLoggerModel> t5 = new List<DataLoggerModel>();
                     t5.Add(dataDrying);
                     await dataLoggerAction.InsertDataLogger(t5, $"{imei}_105");
@@ -608,7 +619,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataLowFlowMeter = new DataLoggerModel();
                     dataLowFlowMeter.TimeStamp = real.TimeStamp.AddHours(8);
                     dataLowFlowMeter.Value = real.LowFlowMeterVoltage;
-                    await channelConfigAction.UpdateValueAction($"{imei}_106", dataLowFlowMeter);
+                    chUpdates.Add(($"{imei}_106", dataLowFlowMeter, false));
                     List<DataLoggerModel> t6 = new List<DataLoggerModel>();
                     t6.Add(dataLowFlowMeter);
                     await dataLoggerAction.InsertDataLogger(t6, $"{imei}_106");
@@ -616,7 +627,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataCommunication = new DataLoggerModel();
                     dataCommunication.TimeStamp = real.TimeStamp.AddHours(8);
                     dataCommunication.Value = real.CommunicationError;
-                    await channelConfigAction.UpdateValueAction($"{imei}_107", dataCommunication);
+                    chUpdates.Add(($"{imei}_107", dataCommunication, false));
                     List<DataLoggerModel> t7 = new List<DataLoggerModel>();
                     t7.Add(dataCommunication);
                     await dataLoggerAction.InsertDataLogger(t7, $"{imei}_107");
@@ -625,12 +636,12 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataNetIndex = new DataLoggerModel();
                     dataNetIndex.TimeStamp = real.TimeStamp.AddHours(8);
                     dataNetIndex.Value = real.NetIndex;
-                    await channelConfigAction.UpdateValueAction($"{imei}_108", dataNetIndex);
+                    chUpdates.Add(($"{imei}_108", dataNetIndex, false));
 
                     DataLoggerModel dataSignal = new DataLoggerModel();
                     dataSignal.TimeStamp = real.TimeStamp.AddHours(8);
                     dataSignal.Value = signal;
-                    await channelConfigAction.UpdateValueAction($"{imei}_109", dataSignal);
+                    chUpdates.Add(($"{imei}_109", dataSignal, false));
                     List<DataLoggerModel> t9 = new List<DataLoggerModel>();
                     t9.Add(dataSignal);
                     await dataLoggerAction.InsertDataLogger(t9, $"{imei}_109");
@@ -638,10 +649,13 @@ namespace MQTT_Vilog_Malaysia.Actions
                     DataLoggerModel dataBattery = new DataLoggerModel();
                     dataBattery.TimeStamp = real.TimeStamp.AddHours(8);
                     dataBattery.Value = battery;
-                    await channelConfigAction.UpdateValueAction($"{imei}_110", dataBattery);
+                    chUpdates.Add(($"{imei}_110", dataBattery, false));
                     List<DataLoggerModel> t10 = new List<DataLoggerModel>();
                     t10.Add(dataBattery);
                     await dataLoggerAction.InsertDataLogger(t10, $"{imei}_110");
+
+                    // flush all channel-config updates (realtime) in one BulkWrite
+                    await channelConfigAction.BulkUpdateValues(chUpdates);
                 }
 
                 List<LogSUModel> list = await analyzeDataAction.AnalyzeDataLog(logData, real.Unit);
@@ -826,8 +840,8 @@ namespace MQTT_Vilog_Malaysia.Actions
             {
                 List<ChannelConfigModel> channel = await channelConfigAction.GetChannelByLoggerId(imei);
 
-                string channelBattery = channel.Where(c => c.BatMetterChannel == true).FirstOrDefault().ChannelId;
-                string channelSignal = channel.Where(c => c.BatLoggerChannel == true).FirstOrDefault().ChannelId;
+                string channelBattery = channel.Where(c => c.BatMetterChannel == true).FirstOrDefault()?.ChannelId ?? "";
+                string channelSignal = channel.Where(c => c.BatLoggerChannel == true).FirstOrDefault()?.ChannelId ?? "";
 
                 if (channelBattery != "")
                 {

@@ -83,10 +83,9 @@ namespace MQTT_Vilog_Malaysia.Actions
             return list;
         }
 
-        public async void InsertSite(SiteModel site)
+        public async Task InsertSite(SiteModel site)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
-            int nRow = 0;
 
             try
             {
@@ -94,19 +93,30 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                 var collection = connect.db.GetCollection<SiteModel>("t_Sites");
 
-                List<SiteModel> check =  collection.FindAsync(s => s.SiteId == site.SiteId).Result.ToList();
+                // Atomic insert-if-absent: avoids check-then-insert race between concurrent message threads
+                var filter = Builders<SiteModel>.Filter.Eq(x => x.SiteId, site.SiteId);
+                var update = Builders<SiteModel>.Update
+                    .SetOnInsert(x => x.SiteId, site.SiteId)
+                    .SetOnInsert(x => x.IMEI, site.IMEI)
+                    .SetOnInsert(x => x.Location, site.Location)
+                    .SetOnInsert(x => x.LoggerId, site.LoggerId)
+                    .SetOnInsert(x => x.Longitude, site.Longitude)
+                    .SetOnInsert(x => x.Latitude, site.Latitude)
+                    .SetOnInsert(x => x.DisplayGroup, site.DisplayGroup)
+                    .SetOnInsert(x => x.StartHour, site.StartHour)
+                    .SetOnInsert(x => x.StartDay, site.StartDay)
+                    .SetOnInsert(x => x.IsDisplay, site.IsDisplay)
+                    .SetOnInsert(x => x.InterVal, site.InterVal)
+                    .SetOnInsert(x => x.TypeMeter, site.TypeMeter);
 
-                if (check.Count <= 0) { 
-                    await collection.InsertOneAsync(site);
-                }
-
+                await collection.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });
             }
             catch (Exception ex)
             {
                 await writeLogAction.WriteErrorLog(ex.Message);
             }
         }
-        public async void UpdateSite(ConfigVilogModel site)
+        public async Task UpdateSite(ConfigVilogModel site)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
 
