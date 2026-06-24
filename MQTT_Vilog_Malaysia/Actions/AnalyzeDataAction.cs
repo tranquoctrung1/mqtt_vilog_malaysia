@@ -157,7 +157,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 }
 
                 // insert alarm for battery 
-                if(battery > 0 && battery < 3.4)
+                if(battery > 0 && battery <= 3.4)
                 {
                     HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
                     alarmBattery.SiteId = siteid;
@@ -627,7 +627,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     }
 
                     // insert alarm for battery 
-                    if (battery > 0 && battery < 3.4)
+                    if (battery > 0 && battery <= 3.4)
                     {
                         HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
                         alarmBattery.SiteId = siteid;

@@ -68,7 +68,8 @@ namespace MQTT_Vilog_Malaysia.Actions
                 // CreateOne auto-creates the collection if missing and is idempotent if the
                 // index already exists. Removes the expensive ListCollectionNames + CreateCollection.
                 var indexKeys = Builders<DataLoggerModel>.IndexKeys.Ascending("TimeStamp");
-                await collection.Indexes.CreateOneAsync(new CreateIndexModel<DataLoggerModel>(indexKeys));
+                await collection.Indexes.CreateOneAsync(new CreateIndexModel<DataLoggerModel>(
+                    indexKeys, new CreateIndexOptions { Unique = true }));
 
                 _ensuredCollections[collectionName] = true;
             }
@@ -347,10 +348,37 @@ namespace MQTT_Vilog_Malaysia.Actions
             try
             {
                 var keys = Builders<DataLoggerModel>.IndexKeys.Ascending("TimeStamp");
-                await collection.Indexes.CreateOneAsync(new CreateIndexModel<DataLoggerModel>(keys));
+                await collection.Indexes.CreateOneAsync(new CreateIndexModel<DataLoggerModel>(
+                    keys, new CreateIndexOptions { Unique = true }));
             }
             catch { /* index race / already exists - ignore */ }
             _ensuredCollections[collectionName] = true;
+        }
+
+        // Upsert keyed on TimeStamp so re-delivered/duplicate messages (MQTT QoS1
+        // at-least-once redelivery, device resending its log buffer) overwrite the
+        // existing row instead of inserting a duplicate document.
+        private async Task<int> UpsertByTimeStamp(IMongoCollection<DataLoggerModel> collection, List<DataLoggerModel> list)
+        {
+            if (list == null || list.Count == 0) return 0;
+
+            // De-dupe within the same batch too: keep the last value per TimeStamp,
+            // since BulkWrite cannot upsert the same key twice in one call.
+            var byTimeStamp = list
+                .Where(x => x.TimeStamp.HasValue)
+                .GroupBy(x => x.TimeStamp.Value)
+                .Select(g => g.Last());
+
+            var models = byTimeStamp.Select(item =>
+            {
+                var filter = Builders<DataLoggerModel>.Filter.Eq(x => x.TimeStamp, item.TimeStamp);
+                return (WriteModel<DataLoggerModel>)new ReplaceOneModel<DataLoggerModel>(filter, item) { IsUpsert = true };
+            }).ToList();
+
+            if (models.Count == 0) return 0;
+
+            var result = await collection.BulkWriteAsync(models, new BulkWriteOptions { IsOrdered = false });
+            return (int)(result.InsertedCount + result.Upserts.Count + result.ModifiedCount);
         }
 
         public async Task<int> InsertDataLogger(List<DataLoggerModel> list, string channelid)
@@ -366,9 +394,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 var collection = connect.db.GetCollection<DataLoggerModel>(name);
                 await EnsureIndex(collection, name);
 
-                await collection.InsertManyAsync(list);
-
-                nRows = list.Count;
+                nRows = await UpsertByTimeStamp(collection, list);
             }
             catch (Exception ex)
             {
@@ -391,9 +417,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 var collection = connect.db.GetCollection<DataLoggerModel>(name);
                 await EnsureIndex(collection, name);
 
-                await collection.InsertManyAsync(list);
-
-                nRows = list.Count;
+                nRows = await UpsertByTimeStamp(collection, list);
             }
             catch (Exception ex)
             {
