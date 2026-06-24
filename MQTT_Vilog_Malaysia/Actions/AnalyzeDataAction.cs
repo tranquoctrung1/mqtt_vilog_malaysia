@@ -157,7 +157,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                 }
 
                 // insert alarm for battery 
-                if(battery > 0 && battery <= 3.5)
+                if(battery > 0 && battery < 3.4)
                 {
                     HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
                     alarmBattery.SiteId = siteid;
@@ -165,20 +165,23 @@ namespace MQTT_Vilog_Malaysia.Actions
                     alarmBattery.LoggerId = loggerid;
                     alarmBattery.ChannelId = $"{loggerid}_05";
                     alarmBattery.ChannelName = "7. Battery Logger";
-                    alarmBattery.Content = "";
+                    alarmBattery.Content = "Low battery";
+                    alarmBattery.Type = 16;
                     alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(8);
                     alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(8);
 
-                    if (battery >= 3.4)
-                    {
-                        alarmBattery.Content = "Low battery";
-                        alarmBattery.Type = 16;
-                    }
-                    else
-                    {
-                        alarmBattery.Content = "Out Of Battery";
-                        alarmBattery.Type = 17;
-                    }
+                    //if (battery >= 3.4)
+                    //{
+                    //    alarmBattery.Content = "Low battery";
+                    //    alarmBattery.Type = 16;
+                    //}
+                    //else
+                    //{
+                    //    alarmBattery.Content = "Out Of Battery";
+
+
+                    //    alarmBattery.Type = 17;
+                    //}
 
                     using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                     {
@@ -624,7 +627,7 @@ namespace MQTT_Vilog_Malaysia.Actions
                     }
 
                     // insert alarm for battery 
-                    if (battery > 0 && battery <= 3.5)
+                    if (battery > 0 && battery < 3.4)
                     {
                         HistoryAlarmModel alarmBattery = new HistoryAlarmModel();
                         alarmBattery.SiteId = siteid;
@@ -632,20 +635,22 @@ namespace MQTT_Vilog_Malaysia.Actions
                         alarmBattery.LoggerId = loggerid;
                         alarmBattery.ChannelId = $"{loggerid}_05";
                         alarmBattery.ChannelName = "7. Battery Logger";
-                        alarmBattery.Content = "";
+                        //alarmBattery.Content = "";
                         alarmBattery.TimeStampHasValue = DateTime.Now.AddHours(8);
                         alarmBattery.TimeStampAlarm = DateTime.Now.AddHours(8);
+                        alarmBattery.Content = "Low Battery";
+                        alarmBattery.Type = 26;
 
-                        if (battery >= 3.4)
-                        {
-                            alarmBattery.Content = "Low Battery";
-                            alarmBattery.Type = 26;
-                        }
-                        else
-                        {
-                            alarmBattery.Content = "Out Of Battery";
-                            alarmBattery.Type = 27;
-                        }
+                        //if (battery >= 3.4)
+                        //{
+                        //    alarmBattery.Content = "Low Battery";
+                        //    alarmBattery.Type = 26;
+                        //}
+                        //else
+                        //{
+                        //    alarmBattery.Content = "Out Of Battery";
+                        //    alarmBattery.Type = 27;
+                        //}
 
                         using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
                         {
