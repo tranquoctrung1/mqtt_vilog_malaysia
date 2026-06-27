@@ -547,6 +547,110 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                             }
                                             else if (dataObjects.Payload.Length <= 50)
                                             {
+                                                if (dataObjects.Payload.Length <= 8)
+                                                {
+                                                    // Level meter
+
+                                                    // insert site
+                                                    SiteModel site = new SiteModel();
+                                                    site.SiteId = loggerid;
+                                                    site.IMEI = dataObjects.IMEI;
+                                                    site.Location = location;
+                                                    site.LoggerId = loggerid;
+                                                    site.Longitude = 0;
+                                                    site.Latitude = 0;
+                                                    site.DisplayGroup = "Vilog";
+                                                    site.StartHour = 0;
+                                                    site.StartDay = 1;
+                                                    site.IsDisplay = true;
+                                                    site.InterVal = 5;
+                                                    site.TypeMeter = "Level";
+
+                                                    using (SiteAction siteAction = new SiteAction())
+                                                    {
+                                                        await siteAction.InsertSite(site);
+                                                    }
+
+                                                    // insert channel
+                                                    List<ChannelConfigModel> listChannels = new List<ChannelConfigModel>();
+
+                                                    ChannelConfigModel level = new ChannelConfigModel();
+                                                    level.ChannelId = $"{loggerid}_200";
+                                                    level.ChannelName = "1. Level";
+                                                    level.LoggerId = loggerid;
+                                                    level.Unit = "m";
+                                                    level.ForwardFlow = false;
+                                                    level.ReverseFlow = false;
+                                                    level.Pressure1 = false;
+                                                    level.Pressure2 = false;
+                                                    level.TimeStamp = null;
+                                                    level.LastValue = null;
+                                                    level.IndexTimeStamp = null;
+                                                    level.LastIndex = null;
+                                                    level.OtherChannel = false;
+
+                                                    listChannels.Add(level);
+
+                                                    ChannelConfigModel batteryLevel = new ChannelConfigModel();
+                                                    batteryLevel.ChannelId = $"{loggerid}_05";
+                                                    batteryLevel.ChannelName = "2. Logger Battery";
+                                                    batteryLevel.LoggerId = loggerid;
+                                                    batteryLevel.Unit = "V";
+                                                    batteryLevel.ForwardFlow = false;
+                                                    batteryLevel.ReverseFlow = false;
+                                                    batteryLevel.Pressure1 = false;
+                                                    batteryLevel.Pressure2 = false;
+                                                    batteryLevel.TimeStamp = null;
+                                                    batteryLevel.LastValue = null;
+                                                    batteryLevel.IndexTimeStamp = null;
+                                                    batteryLevel.LastIndex = null;
+                                                    batteryLevel.BatLoggerChannel = true;
+
+                                                    listChannels.Add(batteryLevel);
+
+                                                    ChannelConfigModel signalLevel = new ChannelConfigModel();
+                                                    signalLevel.ChannelId = $"{loggerid}_07";
+                                                    signalLevel.ChannelName = "3. Signal";
+                                                    signalLevel.LoggerId = loggerid;
+                                                    signalLevel.Unit = "-";
+                                                    signalLevel.ForwardFlow = false;
+                                                    signalLevel.ReverseFlow = false;
+                                                    signalLevel.Pressure1 = false;
+                                                    signalLevel.Pressure2 = false;
+                                                    signalLevel.TimeStamp = null;
+                                                    signalLevel.LastValue = null;
+                                                    signalLevel.IndexTimeStamp = null;
+                                                    signalLevel.LastIndex = null;
+
+                                                    listChannels.Add(signalLevel);
+
+                                                    using (ChannelConfigAction channelConfigAction = new ChannelConfigAction())
+                                                    {
+                                                        await channelConfigAction.InsertChannelConfigsBulk(listChannels);
+                                                    }
+
+                                                    using (HandleDataAction handleDataAction = new HandleDataAction())
+                                                    {
+                                                        Console.WriteLine("Execute handle data Level Meter");
+                                                        DateTime time = DateTime.Parse(dataObjects.time.ToString());
+                                                        time = time.AddHours(8);
+
+                                                        if (time.Year > DateTime.Now.Year)
+                                                        {
+                                                            await handleDataAction.HandleDataLevelMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                            Console.WriteLine("Done executed handle data Level Meter");
+                                                        }
+                                                        else
+                                                        {
+                                                            await handleDataAction.HandleDataLevelMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                            Console.WriteLine("Done executed handle data Level Meter");
+                                                        }
+                                                    }
+
+                                                    checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
+                                                }
+                                                else
+                                                {
                                                 // Kronhe meter
 
                                                 // insert site
@@ -748,6 +852,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                 }
 
                                                 checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
+                                                }
                                             }
                                         }
                                         else
@@ -778,6 +883,30 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                             }
                                             else if (dataObjects.Payload.Length <= 50)
                                             {
+                                                if (dataObjects.Payload.Length <= 8)
+                                                {
+                                                    using (HandleDataAction handleDataAction = new HandleDataAction())
+                                                    {
+                                                        Console.WriteLine("Execute handle data Level Meter");
+                                                        DateTime time = DateTime.Parse(dataObjects.time.ToString());
+                                                        time = time.AddHours(8);
+
+                                                        if (time.Year > DateTime.Now.Year)
+                                                        {
+                                                            await handleDataAction.HandleDataLevelMeterOverTime(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                            Console.WriteLine("Done executed handle data Level Meter");
+                                                        }
+                                                        else
+                                                        {
+                                                            await handleDataAction.HandleDataLevelMeter(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                                            Console.WriteLine("Done executed handle data Level Meter");
+                                                        }
+                                                    }
+
+                                                    checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
+                                                }
+                                                else
+                                                {
                                                 using (HandleDataAction handleDataAction = new HandleDataAction())
                                                 {
                                                     Console.WriteLine("Execute handle data Kronhe Meter");
@@ -797,6 +926,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
                                                 }
 
                                                 checkImeiAvailableAction.UpdateUsedForImei(dataObjects.IMEI, url);
+                                                }
                                             }
 
 

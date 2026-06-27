@@ -890,6 +890,100 @@ namespace MQTT_Vilog_Malaysia.Actions
                 await writeLogAction.WriteErrorLog(ex.Message);
             }
         }
+        public async Task HandleDataLevelMeter(string payload, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+            AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
+            ChannelConfigAction channelConfigAction = new ChannelConfigAction();
+            DataLoggerAction dataLoggerAction = new DataLoggerAction();
+            try
+            {
+                LogLevelModel realtimeData = await analyzeDataAction.AnalyzeDataRealTimeLevelMeter(payload, time, siteid, location, imei, signal, battery);
+                List<LogLevelModel> logs = await analyzeDataAction.AnalyzeLogDataLevelMeter(Log);
+
+                var chUpdates = new List<(string channelId, DataLoggerModel value, bool isIndex)>();
+
+                DataLoggerModel dataLevel = new DataLoggerModel { Value = realtimeData.Level ?? 0, TimeStamp = realtimeData.TimeStamp.AddHours(8) };
+                DataLoggerModel dataBattery = new DataLoggerModel { Value = battery, TimeStamp = DateTime.Now.AddHours(8) };
+                DataLoggerModel dataSignal = new DataLoggerModel { Value = signal, TimeStamp = DateTime.Now.AddHours(8) };
+
+                chUpdates.Add(($"{imei}_200", dataLevel, false));
+                chUpdates.Add(($"{imei}_05", dataBattery, false));
+                chUpdates.Add(($"{imei}_07", dataSignal, false));
+
+                await channelConfigAction.BulkUpdateValues(chUpdates);
+
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataBattery }, $"{imei}_05");
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataSignal }, $"{imei}_07");
+
+                if (logs.Count > 0)
+                {
+                    List<DataLoggerModel> dataInsertLevel = new List<DataLoggerModel>();
+                    foreach (var item in logs)
+                        dataInsertLevel.Add(new DataLoggerModel { Value = item.Level ?? 0, TimeStamp = item.TimeStamp.AddHours(8) });
+                    await dataLoggerAction.InsertDataLogger(dataInsertLevel, $"{imei}_200");
+                }
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+        }
+
+        public async Task HandleDataLevelMeterOverTime(string payload, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+            AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
+            ChannelConfigAction channelConfigAction = new ChannelConfigAction();
+            DataLoggerAction dataLoggerAction = new DataLoggerAction();
+            try
+            {
+                LogLevelModel realtimeData = await analyzeDataAction.AnalyzeDataRealTimeLevelMeter(payload, time, siteid, location, imei, signal, battery);
+                List<LogLevelModel> logs = await analyzeDataAction.AnalyzeLogDataLevelMeter(Log);
+
+                DateTime now = DateTime.Now.AddHours(8);
+                DateTime realtime = realtimeData.TimeStamp.AddHours(8);
+
+                var chUpdates = new List<(string channelId, DataLoggerModel value, bool isIndex)>();
+
+                DataLoggerModel dataLevel = new DataLoggerModel { Value = realtimeData.Level ?? 0, TimeStamp = now };
+                DataLoggerModel dataBattery = new DataLoggerModel { Value = battery, TimeStamp = now };
+                DataLoggerModel dataSignal = new DataLoggerModel { Value = signal, TimeStamp = now };
+
+                chUpdates.Add(($"{imei}_200", dataLevel, false));
+                chUpdates.Add(($"{imei}_05", dataBattery, false));
+                chUpdates.Add(($"{imei}_07", dataSignal, false));
+
+                await channelConfigAction.BulkUpdateValues(chUpdates);
+
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataBattery }, $"{imei}_05");
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataSignal }, $"{imei}_07");
+
+                if (logs.Count > 0)
+                {
+                    DateTime? currentTime = await dataLoggerAction.GetCurrentTimeStampDataLogger($"{imei}_200");
+                    List<DataLoggerModel> dataInsertLevel = new List<DataLoggerModel>();
+                    foreach (var item in logs)
+                    {
+                        DateTime timeLog = item.TimeStamp.AddHours(8);
+                        double diff = Math.Abs((realtime - timeLog).TotalSeconds);
+                        DateTime realTimeLog = now.AddSeconds(-diff);
+                        realTimeLog = new DateTime(realTimeLog.Year, realTimeLog.Month, realTimeLog.Day, realTimeLog.Hour, item.TimeStamp.Minute, 0);
+                        realTimeLog = realTimeLog.AddHours(8);
+
+                        if (currentTime == null || DateTime.Compare(realTimeLog, currentTime.Value.AddHours(7)) > 0)
+                            dataInsertLevel.Add(new DataLoggerModel { Value = item.Level ?? 0, TimeStamp = realTimeLog });
+                    }
+                    await dataLoggerAction.InsertDataLogger(dataInsertLevel, $"{imei}_200");
+                }
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+        }
+
+
         public void Dispose()
         {
             Dispose(true);
