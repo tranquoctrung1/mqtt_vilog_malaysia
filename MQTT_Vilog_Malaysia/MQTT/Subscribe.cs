@@ -92,6 +92,7 @@ namespace MQTT_Vilog_Malaysia.MQTT
                         try
                         {
                             await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+                            RealtimePublisher.Client = mqttClient;
                             await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
                             Console.WriteLine("MQTT reconnected and re-subscribed.");
                             break;
@@ -104,6 +105,8 @@ namespace MQTT_Vilog_Malaysia.MQTT
                 };
 
                 await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+
+                RealtimePublisher.Client = mqttClient;
 
                 await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
 
