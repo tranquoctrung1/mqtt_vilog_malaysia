@@ -369,10 +369,19 @@ namespace MQTT_Vilog_Malaysia.Actions
                 .GroupBy(x => x.TimeStamp.Value)
                 .Select(g => g.Last());
 
+            // Use UpdateOneModel ($set + $setOnInsert) instead of ReplaceOneModel so that
+            // upsert-inserts get a freshly generated _id rather than ObjectId.Empty.
+            // ReplaceOneModel with IsUpsert=true embeds the model's _id in the inserted doc —
+            // all new DataLoggerModel instances share _id=ObjectId.Empty, causing a duplicate-key
+            // error on _id for every insert after the first one.
             var models = byTimeStamp.Select(item =>
             {
                 var filter = Builders<DataLoggerModel>.Filter.Eq(x => x.TimeStamp, item.TimeStamp);
-                return (WriteModel<DataLoggerModel>)new ReplaceOneModel<DataLoggerModel>(filter, item) { IsUpsert = true };
+                var update = Builders<DataLoggerModel>.Update
+                    .SetOnInsert(x => x.Id, ObjectId.GenerateNewId())
+                    .SetOnInsert(x => x.TimeStamp, item.TimeStamp)
+                    .Set(x => x.Value, item.Value);
+                return (WriteModel<DataLoggerModel>)new UpdateOneModel<DataLoggerModel>(filter, update) { IsUpsert = true };
             }).ToList();
 
             if (models.Count == 0) return 0;

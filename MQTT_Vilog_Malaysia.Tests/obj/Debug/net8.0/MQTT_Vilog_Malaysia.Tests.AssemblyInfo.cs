@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MQTT_Vilog_Malaysia.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c59e17ecc52e7e738b9154166146cac2d8d232d8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea7b2b8ca96be2d635e9e3bc42337e6c96670b74")]
 [assembly: System.Reflection.AssemblyProductAttribute("MQTT_Vilog_Malaysia.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MQTT_Vilog_Malaysia.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

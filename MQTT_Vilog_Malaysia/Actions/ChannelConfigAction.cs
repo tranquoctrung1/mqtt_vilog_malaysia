@@ -224,6 +224,13 @@ namespace MQTT_Vilog_Malaysia.Actions
                 }
 
                 await collection.BulkWriteAsync(models, new BulkWriteOptions { IsOrdered = false });
+
+                // Invalidate cache for all affected loggers so next read gets fresh LastValue/LastIndex.
+                var affectedLoggers = updates
+                    .Select(u => u.channelId.Contains('_') ? u.channelId[..u.channelId.LastIndexOf('_')] : u.channelId)
+                    .Distinct();
+                foreach (var loggerId in affectedLoggers)
+                    InvalidateChannelCache(loggerId);
             }
             catch (Exception ex)
             {
