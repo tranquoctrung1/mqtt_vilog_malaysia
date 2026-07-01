@@ -1,4 +1,5 @@
 ﻿using MQTT_Vilog_Malaysia.Models;
+using MQTT_Vilog_Malaysia.MQTT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,6 +155,13 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                 await channelConfigAction.BulkUpdateValues(chUpdates);
 
+                foreach (var chUpdate in chUpdates)
+                {
+                    if (!chUpdate.isIndex)
+                    {
+                        await RealtimePublisher.PublishChannelUpdateAsync(imei, chUpdate.channelId, chUpdate.value.Value, chUpdate.value.TimeStamp);
+                    }
+                }
 
                 //insert data logger for battery channel
                 List<DataLoggerModel> listInsertBateryChannel = new List<DataLoggerModel>();
@@ -427,6 +435,13 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                 await channelConfigAction.BulkUpdateValues(chUpdates);
 
+                foreach (var chUpdate in chUpdates)
+                {
+                    if (!chUpdate.isIndex)
+                    {
+                        await RealtimePublisher.PublishChannelUpdateAsync(imei, chUpdate.channelId, chUpdate.value.Value, chUpdate.value.TimeStamp);
+                    }
+                }
 
                 //insert data logger for battery channel
                 List<DataLoggerModel> listInsertBateryChannel = new List<DataLoggerModel>();
@@ -656,6 +671,14 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                     // flush all channel-config updates (realtime) in one BulkWrite
                     await channelConfigAction.BulkUpdateValues(chUpdates);
+
+                    foreach (var chUpdate in chUpdates)
+                    {
+                        if (!chUpdate.isIndex)
+                        {
+                            await RealtimePublisher.PublishChannelUpdateAsync(imei, chUpdate.channelId, chUpdate.value.Value, chUpdate.value.TimeStamp);
+                        }
+                    }
                 }
 
                 List<LogSUModel> list = await analyzeDataAction.AnalyzeDataLog(logData, real.Unit);
@@ -913,6 +936,14 @@ namespace MQTT_Vilog_Malaysia.Actions
 
                 await channelConfigAction.BulkUpdateValues(chUpdates);
 
+                foreach (var chUpdate in chUpdates)
+                {
+                    if (!chUpdate.isIndex)
+                    {
+                        await RealtimePublisher.PublishChannelUpdateAsync(imei, chUpdate.channelId, chUpdate.value.Value, chUpdate.value.TimeStamp);
+                    }
+                }
+
                 await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataBattery }, $"{imei}_05");
                 await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataSignal }, $"{imei}_07");
 
@@ -955,6 +986,14 @@ namespace MQTT_Vilog_Malaysia.Actions
                 chUpdates.Add(($"{imei}_07", dataSignal, false));
 
                 await channelConfigAction.BulkUpdateValues(chUpdates);
+
+                foreach (var chUpdate in chUpdates)
+                {
+                    if (!chUpdate.isIndex)
+                    {
+                        await RealtimePublisher.PublishChannelUpdateAsync(imei, chUpdate.channelId, chUpdate.value.Value, chUpdate.value.TimeStamp);
+                    }
+                }
 
                 await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataBattery }, $"{imei}_05");
                 await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataSignal }, $"{imei}_07");
