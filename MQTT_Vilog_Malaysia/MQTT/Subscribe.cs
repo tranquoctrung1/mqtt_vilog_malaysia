@@ -50,7 +50,12 @@ namespace MQTT_Vilog_Malaysia.MQTT
                 // redelivers them on reconnect (no loss across short outages/restarts).
                 var mqttClientOptions = new MqttClientOptionsBuilder()
                     .WithTcpServer(host, port)
-                    .WithClientId("vilog_malaysia_subscriber")
+                    // Suffixed with the host machine name (stable across restarts, so
+                    // CleanSession=false session resumption still works) instead of a
+                    // fixed literal -- a static ClientId caused a live "SessionTakenOver"
+                    // reconnect loop when a second instance of this app connected to the
+                    // same broker, each kicking the other off repeatedly.
+                    .WithClientId($"vilog_malaysia_subscriber_{Environment.MachineName}")
                     .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
                     .WithCleanSession(false)
                     .WithSessionExpiryInterval(3600)
@@ -942,6 +947,110 @@ namespace MQTT_Vilog_Malaysia.MQTT
 
                         }
                     }
+                    else if (splitTopic.Length == 5 && splitTopic[0].ToLower().Trim() == "vilog" && splitTopic[1] == "MAG")
+                    {
+                        // Siemens MAG8000. Client apps prefix the site-name segment with "MAG"
+                        // as its own underscore-delimited segment (Vilog_MAG_<Site>_<ID>_PUB),
+                        // so this branch is reached instead of the 4-segment branch above.
+                        // Needed because MAG8000's payload length (48 hex chars) overlaps with
+                        // Krohne's typical length range, so the length-based routing used for
+                        // SU/Level/Krohne below cannot reliably distinguish them -- this topic
+                        // check must run first.
+                        string loggerid = splitTopic[3];
+                        string location = splitTopic[2];
+
+                        using (HistorySendTimeAction historySendTimeAction = new HistorySendTimeAction())
+                        {
+                            HistorySendTimeModel his = new HistorySendTimeModel();
+                            his.SiteId = loggerid;
+                            his.Location = location;
+                            his.LoggerId = loggerid;
+                            his.TimeStamp = DateTime.Now;
+
+                            await historySendTimeAction.InsertHistorySendTime(his);
+                        }
+
+                        if (payload != "")
+                        {
+                            var dataObjects = JsonSerializer.Deserialize<PayloadMQTTModel>(payload);
+
+                            if (_logRawPayload)
+                            {
+                                using (WriteJsonFileAction writeJsonFileAction = new WriteJsonFileAction())
+                                {
+                                    await writeJsonFileAction.WriteJsonFileAsync(topic, dataObjects);
+                                }
+                            }
+
+                            if (dataObjects.IMEI != "")
+                            {
+                                using (SiteAction siteAction2 = new SiteAction())
+                                {
+                                    List<SiteModel> listSite = await siteAction2.GetSite(loggerid);
+
+                                    List<ChannelConfigModel> listChannels = BuildMag8000Channels(loggerid);
+
+                                    if (listSite.Count <= 0)
+                                    {
+                                        // First time seen -> provision site + channels.
+                                        SiteModel site = new SiteModel();
+                                        site.SiteId = loggerid;
+                                        site.IMEI = dataObjects.IMEI;
+                                        site.Location = location;
+                                        site.LoggerId = loggerid;
+                                        site.Longitude = 0;
+                                        site.Latitude = 0;
+                                        site.DisplayGroup = "Vilog";
+                                        site.StartHour = 0;
+                                        site.StartDay = 1;
+                                        site.IsDisplay = true;
+                                        site.InterVal = 5;
+                                        site.TypeMeter = "MAG8000";
+
+                                        using (SiteAction siteAction = new SiteAction())
+                                        {
+                                            await siteAction.InsertSite(site);
+                                        }
+
+                                        using (ChannelConfigAction channelConfigAction = new ChannelConfigAction())
+                                        {
+                                            await channelConfigAction.InsertChannelConfigsBulk(listChannels);
+                                        }
+
+                                        using (HandleDataAction handleDataAction = new HandleDataAction())
+                                        {
+                                            Console.WriteLine("Execute handle data MAG8000 Meter");
+                                            DateTime time = DateTime.Parse(dataObjects.time.ToString());
+
+                                            await handleDataAction.HandleDataMag8000(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                            Console.WriteLine("Done executed handle data MAG8000 Meter");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SiteModel site = listSite[0];
+
+                                        // Site already exists -> update (not insert) channel
+                                        // config so a changed config takes effect, then handle data.
+                                        using (ChannelConfigAction channelConfigAction = new ChannelConfigAction())
+                                        {
+                                            await channelConfigAction.UpdateChannelConfigsBulk(listChannels);
+                                        }
+
+                                        using (HandleDataAction handleDataAction = new HandleDataAction())
+                                        {
+                                            Console.WriteLine("Execute handle data MAG8000 Meter");
+                                            DateTime time = DateTime.Parse(dataObjects.time.ToString());
+                                            time = time.AddHours(8);
+
+                                            await handleDataAction.HandleDataMag8000(dataObjects.Payload, dataObjects.AdditionalData, time, site.LoggerId, dataObjects.battery, site.SiteId, site.Location, dataObjects.signal);
+                                            Console.WriteLine("Done executed handle data MAG8000 Meter");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -949,6 +1058,179 @@ namespace MQTT_Vilog_Malaysia.MQTT
                 WriteLogAction writeLogAction = new WriteLogAction();
                 await writeLogAction.WriteErrorLog(ex.ToString());
             }
+        }
+
+        // Builds the MAG8000 channel configs, mirroring the Krohne channel config document
+        // shape/naming (9 channels: Forward Flow, Reverse Flow, Forward/Reverse/Net
+        // Totalizer, Alarm, Logger Battery, Meter Battery Capacity, Signal).
+        //   _02  Forward Flow            <- decoded MAG8000 Flow (real)
+        //   _03  Reverse Flow            <- no source register on MAG8000, always 0
+        //   _98  Forward Totalizer       <- decoded MAG8000 Forward Total (real)
+        //   _99  Reverse Totalizer       <- decoded MAG8000 Reverse Total (real)
+        //   _100 Net Totalizer           <- no source register on MAG8000, always 0
+        //   _101 Alarm                   <- decoded MAG8000 Alarm (real)
+        //   _05  Logger Battery (V)      <- JSON top-level "battery" (modem voltage), same
+        //                                   source as Krohne's _05, common to every meter type
+        //   _06  Meter Battery Capacity  <- decoded MAG8000 Battery register (%, not Ah)
+        //   _07  Signal                  <- JSON top-level "signal", same source as Krohne's _07
+        // _110 removed: duplicated _06 (same s.Battery register decode, HandleDataAction.cs).
+        private List<ChannelConfigModel> BuildMag8000Channels(string loggerid)
+        {
+            List<ChannelConfigModel> listChannels = new List<ChannelConfigModel>();
+
+            ChannelConfigModel flow = new ChannelConfigModel();
+            flow.ChannelId = $"{loggerid}_02";
+            flow.ChannelName = "1. Forward Flow";
+            flow.LoggerId = loggerid;
+            flow.Unit = "m3/h";
+            flow.ForwardFlow = true;
+            flow.ReverseFlow = false;
+            flow.Pressure1 = false;
+            flow.Pressure2 = false;
+            flow.TimeStamp = null;
+            flow.LastValue = null;
+            flow.IndexTimeStamp = null;
+            flow.LastIndex = null;
+            flow.OtherChannel = false;
+
+            listChannels.Add(flow);
+
+            ChannelConfigModel reverse = new ChannelConfigModel();
+            reverse.ChannelId = $"{loggerid}_03";
+            reverse.ChannelName = "2. Reverse Flow";
+            reverse.LoggerId = loggerid;
+            reverse.Unit = "m3/h";
+            reverse.ForwardFlow = false;
+            reverse.ReverseFlow = true;
+            reverse.Pressure1 = false;
+            reverse.Pressure2 = false;
+            reverse.TimeStamp = null;
+            reverse.LastValue = null;
+            reverse.IndexTimeStamp = null;
+            reverse.LastIndex = null;
+            reverse.OtherChannel = false;
+
+            listChannels.Add(reverse);
+
+            ChannelConfigModel forwardTotal = new ChannelConfigModel();
+            forwardTotal.ChannelId = $"{loggerid}_98";
+            forwardTotal.ChannelName = "3. Forward Totalizer";
+            forwardTotal.LoggerId = loggerid;
+            forwardTotal.Unit = "m3";
+            forwardTotal.ForwardFlow = false;
+            forwardTotal.ReverseFlow = false;
+            forwardTotal.Pressure1 = false;
+            forwardTotal.Pressure2 = false;
+            forwardTotal.TimeStamp = null;
+            forwardTotal.LastValue = null;
+            forwardTotal.IndexTimeStamp = null;
+            forwardTotal.LastIndex = null;
+            forwardTotal.OtherChannel = false;
+
+            listChannels.Add(forwardTotal);
+
+            ChannelConfigModel reverseTotal = new ChannelConfigModel();
+            reverseTotal.ChannelId = $"{loggerid}_99";
+            reverseTotal.ChannelName = "4. Reverse Totalizer";
+            reverseTotal.LoggerId = loggerid;
+            reverseTotal.Unit = "m3";
+            reverseTotal.ForwardFlow = false;
+            reverseTotal.ReverseFlow = false;
+            reverseTotal.Pressure1 = false;
+            reverseTotal.Pressure2 = false;
+            reverseTotal.TimeStamp = null;
+            reverseTotal.LastValue = null;
+            reverseTotal.IndexTimeStamp = null;
+            reverseTotal.LastIndex = null;
+            reverseTotal.OtherChannel = false;
+
+            listChannels.Add(reverseTotal);
+
+            ChannelConfigModel netTotal = new ChannelConfigModel();
+            netTotal.ChannelId = $"{loggerid}_100";
+            netTotal.ChannelName = "5. Net Totalizer";
+            netTotal.LoggerId = loggerid;
+            netTotal.Unit = "m3";
+            netTotal.ForwardFlow = false;
+            netTotal.ReverseFlow = false;
+            netTotal.Pressure1 = false;
+            netTotal.Pressure2 = false;
+            netTotal.TimeStamp = null;
+            netTotal.LastValue = null;
+            netTotal.IndexTimeStamp = null;
+            netTotal.LastIndex = null;
+            netTotal.OtherChannel = false;
+
+            listChannels.Add(netTotal);
+
+            ChannelConfigModel alarm = new ChannelConfigModel();
+            alarm.ChannelId = $"{loggerid}_101";
+            alarm.ChannelName = "6. Alarm";
+            alarm.LoggerId = loggerid;
+            alarm.Unit = "-";
+            alarm.ForwardFlow = false;
+            alarm.ReverseFlow = false;
+            alarm.Pressure1 = false;
+            alarm.Pressure2 = false;
+            alarm.TimeStamp = null;
+            alarm.LastValue = null;
+            alarm.IndexTimeStamp = null;
+            alarm.LastIndex = null;
+            alarm.OtherChannel = true;
+
+            listChannels.Add(alarm);
+
+            ChannelConfigModel loggerBattery = new ChannelConfigModel();
+            loggerBattery.ChannelId = $"{loggerid}_05";
+            loggerBattery.ChannelName = "7. Logger Battery";
+            loggerBattery.LoggerId = loggerid;
+            loggerBattery.Unit = "V";
+            loggerBattery.ForwardFlow = false;
+            loggerBattery.ReverseFlow = false;
+            loggerBattery.Pressure1 = false;
+            loggerBattery.Pressure2 = false;
+            loggerBattery.TimeStamp = null;
+            loggerBattery.LastValue = null;
+            loggerBattery.IndexTimeStamp = null;
+            loggerBattery.LastIndex = null;
+            loggerBattery.BatLoggerChannel = true;
+
+            listChannels.Add(loggerBattery);
+
+            ChannelConfigModel batteryCapacity = new ChannelConfigModel();
+            batteryCapacity.ChannelId = $"{loggerid}_06";
+            batteryCapacity.ChannelName = "8. Meter Battery Capacity";
+            batteryCapacity.LoggerId = loggerid;
+            batteryCapacity.Unit = "%";
+            batteryCapacity.ForwardFlow = false;
+            batteryCapacity.ReverseFlow = false;
+            batteryCapacity.Pressure1 = false;
+            batteryCapacity.Pressure2 = false;
+            batteryCapacity.TimeStamp = null;
+            batteryCapacity.LastValue = null;
+            batteryCapacity.IndexTimeStamp = null;
+            batteryCapacity.LastIndex = null;
+            batteryCapacity.OtherChannel = false;
+
+            listChannels.Add(batteryCapacity);
+
+            ChannelConfigModel signal = new ChannelConfigModel();
+            signal.ChannelId = $"{loggerid}_07";
+            signal.ChannelName = "9. Signal";
+            signal.LoggerId = loggerid;
+            signal.Unit = "-";
+            signal.ForwardFlow = false;
+            signal.ReverseFlow = false;
+            signal.Pressure1 = false;
+            signal.Pressure2 = false;
+            signal.TimeStamp = null;
+            signal.LastValue = null;
+            signal.IndexTimeStamp = null;
+            signal.LastIndex = null;
+
+            listChannels.Add(signal);
+
+            return listChannels;
         }
     }
 }

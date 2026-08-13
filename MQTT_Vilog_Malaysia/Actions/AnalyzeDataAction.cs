@@ -1022,6 +1022,215 @@ namespace MQTT_Vilog_Malaysia.Actions
             return list;
         }
 
+        // ============================ MAG8000 (Siemens) ============================
+        // Decode a 24-byte (48 hex chars) MAG8000 payload -- this is what the real device
+        // actually sends (confirmed against live payloads; Subscribe.cs's MAG-topic branch
+        // routes on this exact 48-char length). All 4 AT command slots arrive DATACUT-trimmed
+        // to bare data only (no per-slot addr/func/bytecount header, no per-slot CRC) --
+        // only the single leading header byte survives. Byte layout (0-indexed):
+        //   byte 0        header (ignored, same convention as Kronhe realtime string)
+        //   byte 1-4      Flow           float32 big-endian (IEEE754)
+        //   byte 5-12     Forward Total  totaltype = 2x int32 BE -> Number + Decimal / 1e9
+        //   byte 13-20    Reverse Total  totaltype = 2x int32 BE -> Number + Decimal / 1e9
+        //   byte 21-22    Alarm          uint16 big-endian (raw bitmask)
+        //   byte 23       Battery        uint8 (0-100 percentage)
+        private LogMag8000Model DecodeMag8000Payload(string payload, DateTime time)
+        {
+            ConvertHexToDoubleAction convertAction = new ConvertHexToDoubleAction();
+
+            LogMag8000Model log = new LogMag8000Model();
+
+            string flowHex = payload.Substring(2, 8);        // bytes 1-4   float32 BE, word-swapped
+            string fwdNumberHex = payload.Substring(14, 8);  // bytes 5-8   int32 (integer part)
+            //string fwdDecimalHex = payload.Substring(18, 8); // bytes 9-12  int32 (fraction * 1e9)
+            string revNumberHex = payload.Substring(30, 8);  // bytes 13-16 int32 (integer part)
+            //string revDecimalHex = payload.Substring(34, 8); // bytes 17-20 int32 (fraction * 1e9)
+            string alarmHex = payload.Substring(42, 4);      // bytes 21-22 uint16
+            string batteryHex = payload.Substring(46, 2);    // byte 23     uint8
+
+            log.Flow = convertAction.ConvertHexToDouble(SwapWordsHex(flowHex));
+
+            // totaltype register: read straight (no word swap), signed int32 (Convert.ToInt32
+            // base16 interprets an 8-hex-digit string as two's-complement signed).
+            int fwdNumber = Convert.ToInt32(fwdNumberHex, 16);
+            log.ForwardTotal = fwdNumber;
+
+            int revNumber = Convert.ToInt32(revNumberHex, 16);
+            log.ReverseTotal = revNumber;
+
+            log.Alarm = Convert.ToInt32(alarmHex, 16);
+            log.Battery = Convert.ToInt32(batteryHex, 16);
+            log.TimeStamp = time;
+
+            return log;
+        }
+
+        // Swaps the two 4-hex-char (2-byte) halves of an 8-hex-char (4-byte) register --
+        // e.g. "AABBCCDD" -> "CCDDAABB".
+        private static string SwapWordsHex(string hex8)
+        {
+            return hex8.Substring(4, 4) + hex8.Substring(0, 4);
+        }
+
+        public async Task<LogMag8000Model> AnalyzeDataRealTimeMag8000Meter(string realTimeString, DateTime time, string siteid, string location, string loggerid)
+        {
+            LogMag8000Model log = new LogMag8000Model();
+            log.TimeStamp = time; // set first, same as Kronhe, so a mid-decode throw below still
+                                   // keeps the real MQTT time instead of falling back to default(DateTime)
+            WriteLogAction writeLogAction = new WriteLogAction();
+
+            try
+            {
+                log = DecodeMag8000Payload(realTimeString, time);
+
+                // Alarms are raised for the live sample only, same as Kronhe
+                // (AnalyzeLogDataHronheMeter never raises alarms for backfilled history).
+                await RaiseMag8000AlarmsAsync(log, siteid, location, loggerid);
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+
+            return log;
+        }
+
+        // Fault status register (43016, wire 3015, uint16) bit definitions per the Siemens
+        // MAG8000 Modbus RTU manual. Bit N (1-based, as documented) maps to bitmask 2^(N-1),
+        // same bit-to-value convention Kronhe's Alarm register uses (bit1=1, bit2=2, bit3=4...).
+        // Bits 15/16 are "Not used" per the manual and omitted here.
+        private static readonly (int bit, int type, string content)[] Mag8000AlarmBits = new (int, int, string)[]
+        {
+            (0x0001, 20, "Insulation error"),
+            (0x0002, 21, "Coil current error"),
+            (0x0004, 22, "Preamplifier overload"),
+            (0x0008, 23, "Database checksum error"),
+            (0x0010, 24, "Low power warning"),
+            (0x0020, 25, "Flow overload warning"),
+            (0x0040, 26, "Pulse A overload warning"),
+            (0x0080, 27, "Pulse B overload warning"),
+            (0x0100, 28, "Consumption interval warning"),
+            (0x0200, 29, "Leakage warning"),
+            (0x0400, 30, "Empty pipe warning"),
+            (0x0800, 31, "Low impedance warning"),
+            (0x1000, 32, "Flow limit warning"),
+            (0x2000, 33, "Reverse flow warning"),
+        };
+
+        // Same alarm mechanism as Kronhe's inline block (dedupe against the latest alarm of
+        // the same Type within 60 minutes via HistoryAlarmAction, insert, push notification)
+        // but adapted for a real bitmask register: MAG8000's Fault status can have multiple
+        // bits active at once, so each active bit is evaluated and raised independently
+        // instead of Kronhe's single-value equality chain (which only ever handles one bit
+        // set at a time).
+        private async Task RaiseMag8000AlarmsAsync(LogMag8000Model log, string siteid, string location, string loggerid)
+        {
+            if (log.Alarm <= 0)
+            {
+                return;
+            }
+
+            foreach (var (bit, type, content) in Mag8000AlarmBits)
+            {
+                if ((log.Alarm & bit) == 0)
+                {
+                    continue;
+                }
+
+                HistoryAlarmModel alarm = new HistoryAlarmModel();
+                alarm.SiteId = siteid;
+                alarm.Location = location;
+                alarm.LoggerId = loggerid;
+                alarm.ChannelId = $"{loggerid}_101";
+                alarm.ChannelName = "6. Alarm";
+                alarm.Content = content;
+                alarm.Type = type;
+                alarm.TimeStampHasValue = DateTime.Now.AddHours(8);
+                alarm.TimeStampAlarm = DateTime.Now.AddHours(8);
+
+                using (HistoryAlarmAction historyAlarmAction = new HistoryAlarmAction())
+                {
+                    HistoryAlarmModel his = await historyAlarmAction.GetLatestAlarmByType(alarm.SiteId, alarm.Type.GetValueOrDefault());
+
+                    bool isInsertAlarm = false;
+
+                    if (his != null)
+                    {
+                        if (his.TimeStampAlarm != null)
+                        {
+                            if ((alarm.TimeStampAlarm.Value - his.TimeStampAlarm.Value).TotalMinutes > 60)
+                            {
+                                isInsertAlarm = true;
+                            }
+                        }
+                        else
+                        {
+                            isInsertAlarm = true;
+                        }
+                    }
+                    else
+                    {
+                        isInsertAlarm = true;
+                    }
+
+                    if (isInsertAlarm)
+                    {
+                        historyAlarmAction.InsertAlarm(alarm);
+
+                        // push notification
+                        using (DeviceTokenAppAction deviceTokenAppAction = new DeviceTokenAppAction())
+                        {
+                            List<DeviceTokenAppModel> listToken = await deviceTokenAppAction.GetDeivceTokenApps();
+                            if (listToken.Count > 0)
+                            {
+                                using (NotificationAction notificationAction = new NotificationAction())
+                                {
+                                    string contentPush = $"Channel {alarm.ChannelName} with value: {log.Alarm} is {alarm.Content}";
+
+                                    await notificationAction.SubmitNotification(alarm.Location, alarm.Location, contentPush, listToken);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task<List<LogMag8000Model>> AnalyzeLogDataMag8000Meter(Dictionary<string, JsonElement> Log)
+        {
+            List<LogMag8000Model> list = new List<LogMag8000Model>();
+            WriteLogAction writeLogAction = new WriteLogAction();
+
+            try
+            {
+                if (Log != null)
+                {
+                    foreach (var d in Log)
+                    {
+                        // each numbered key is [hex_payload, iso_timestamp]
+                        List<string> data = JsonSerializer.Deserialize<List<string>>(d.Value.GetRawText());
+
+                        if (data == null || data.Count < 2)
+                        {
+                            continue;
+                        }
+
+                        DateTime time = DateTime.Parse(data[1]).ToUniversalTime();
+
+                        LogMag8000Model log = DecodeMag8000Payload(data[0], time);
+
+                        list.Add(log);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+
+            return list;
+        }
+
         public void Dispose()
         {
             Dispose(true);

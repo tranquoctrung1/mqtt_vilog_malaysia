@@ -201,6 +201,52 @@ namespace MQTT_Vilog_Malaysia.Actions
             }
         }
 
+        // Bulk UPDATE (not upsert-only) many channels' descriptive/config fields in one
+        // round-trip, for the "site already exists" re-provisioning path (currently used by
+        // MAG8000). Unlike InsertChannelConfigsBulk (SetOnInsert, never touches an existing
+        // doc), this always applies .Set so a changed config on an already-provisioned site
+        // takes effect. Runtime value fields (TimeStamp/LastValue/IndexTimeStamp/LastIndex)
+        // are intentionally left untouched so the site keeps its latest readings.
+        public async Task UpdateChannelConfigsBulk(List<ChannelConfigModel> channels)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+
+            if (channels == null || channels.Count == 0) return;
+
+            try
+            {
+                Connect connect = new Connect();
+                var collection = connect.db.GetCollection<ChannelConfigModel>("t_Channel_Configurations");
+
+                var models = new List<WriteModel<ChannelConfigModel>>();
+                foreach (var c in channels)
+                {
+                    var filter = Builders<ChannelConfigModel>.Filter.Eq(x => x.ChannelId, c.ChannelId);
+                    var update = Builders<ChannelConfigModel>.Update
+                        .Set(x => x.LoggerId, c.LoggerId)
+                        .Set(x => x.ChannelName, c.ChannelName)
+                        .Set(x => x.Unit, c.Unit)
+                        .Set(x => x.Pressure1, c.Pressure1)
+                        .Set(x => x.Pressure2, c.Pressure2)
+                        .Set(x => x.ForwardFlow, c.ForwardFlow)
+                        .Set(x => x.ReverseFlow, c.ReverseFlow)
+                        .Set(x => x.OtherChannel, c.OtherChannel)
+                        .Set(x => x.BatMetterChannel, c.BatMetterChannel)
+                        .Set(x => x.BatLoggerChannel, c.BatLoggerChannel);
+
+                    models.Add(new UpdateOneModel<ChannelConfigModel>(filter, update) { IsUpsert = true });
+                }
+
+                await collection.BulkWriteAsync(models, new BulkWriteOptions { IsOrdered = false });
+
+                foreach (var c in channels) InvalidateChannelCache(c.LoggerId);
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+        }
+
         // One round-trip for many channel value/index updates (instead of N separate UpdateOne).
         public async Task BulkUpdateValues(List<(string channelId, DataLoggerModel value, bool isIndex)> updates)
         {

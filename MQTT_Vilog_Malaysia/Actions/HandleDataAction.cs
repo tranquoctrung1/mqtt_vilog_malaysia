@@ -224,6 +224,152 @@ namespace MQTT_Vilog_Malaysia.Actions
             }
         }
 
+        // Siemens MAG8000. Decodes the root live sample plus every buffered history sample
+        // ("1".."N") and writes each decoded field into both t_Index_Logger_<channelId> and
+        // t_Data_Logger_<channelId> via InsertDataLogger/InsertIndexLogger (which already
+        // upsert by TimeStamp internally, so retried messages never duplicate). Mirrors the
+        // shape / error-handling / logging of HandleDataKronheMeter.
+        public async Task HandleDataMag8000(string payload, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
+        {
+            WriteLogAction writeLogAction = new WriteLogAction();
+            AnalyzeDataAction analyzeDataAction = new AnalyzeDataAction();
+            ChannelConfigAction channelConfigAction = new ChannelConfigAction();
+            DataLoggerAction dataLoggerAction = new DataLoggerAction();
+
+            try
+            {
+                LogMag8000Model realtimeData = await analyzeDataAction.AnalyzeDataRealTimeMag8000Meter(payload, time, siteid, location, imei);
+                List<LogMag8000Model> logs = await analyzeDataAction.AnalyzeLogDataMag8000Meter(Log);
+
+                string flowChannel = $"{imei}_02";
+                string reverseFlowChannel = $"{imei}_03";
+                string forwardTotalChannel = $"{imei}_98";
+                string reverseTotalChannel = $"{imei}_99";
+                string netTotalChannel = $"{imei}_100";
+                string alarmChannel = $"{imei}_101";
+                string loggerBatteryChannel = $"{imei}_05";
+                string batteryCapacityChannel = $"{imei}_06";
+                string signalChannel = $"{imei}_07";
+
+                // t_Channel_Configurations (LastValue/LastIndex) always reflects the live
+                // realtime sample only -- same convention as HandleDataKronheMeter.
+                double realtimeNetTotal = Math.Round(realtimeData.ForwardTotal, 2);
+                double realtimeReverseTotal = Math.Round(realtimeData.ReverseTotal, 2);
+                double realtimeForwardTotal = Math.Round(realtimeNetTotal + Math.Abs(realtimeReverseTotal), 2);
+                double realtimeForwardFlowRate = realtimeData.Flow >= 0 ? Math.Round(realtimeData.Flow, 2) : 0;
+                double realtimeReverseFlowRate = realtimeData.Flow < 0 ? Math.Round(realtimeData.Flow, 2) : 0;
+                DateTime realtimeTs = realtimeData.TimeStamp.AddHours(8);
+
+                DataLoggerModel forwardFlowLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeForwardFlowRate };
+                DataLoggerModel forwardFlowIndexLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeForwardTotal };
+                DataLoggerModel reverseFlowLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeReverseFlowRate };
+                DataLoggerModel reverseFlowIndexLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeReverseTotal };
+                DataLoggerModel forwardTotalLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeForwardTotal };
+                DataLoggerModel reverseTotalLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeReverseTotal };
+                DataLoggerModel netTotalLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeNetTotal };
+                DataLoggerModel alarmLast = new DataLoggerModel { TimeStamp = realtimeTs, Value = realtimeData.Alarm };
+
+                // t_Data_Logger_/t_Index_Logger_ per-timestamp rows come from the buffered
+                // history ("log") samples only -- the realtime sample never gets its own row
+                // there, same convention as HandleDataKronheMeter (logs-only insert loops).
+                List<DataLoggerModel> forwardFlowDataList = new List<DataLoggerModel>();  // t_Data_Logger_<flowChannel>: flow rate
+                List<DataLoggerModel> forwardFlowIndexList = new List<DataLoggerModel>(); // t_Index_Logger_<flowChannel>: Forward Total
+                List<DataLoggerModel> reverseFlowDataList = new List<DataLoggerModel>();  // t_Data_Logger_<reverseFlowChannel>: flow rate
+                List<DataLoggerModel> reverseFlowIndexList = new List<DataLoggerModel>(); // t_Index_Logger_<reverseFlowChannel>: Reverse Total
+                List<DataLoggerModel> forwardTotalList = new List<DataLoggerModel>();
+                List<DataLoggerModel> reverseTotalList = new List<DataLoggerModel>();
+                List<DataLoggerModel> netTotalList = new List<DataLoggerModel>();
+                List<DataLoggerModel> alarmList = new List<DataLoggerModel>();
+
+                foreach (LogMag8000Model s in logs)
+                {
+                    DateTime ts = s.TimeStamp.AddHours(8);
+
+                    // Device register formerly labelled "Forward Total" now feeds _100 (Net
+                    // Totalizer) directly. _98 (Forward Totalizer) is no longer read straight
+                    // from the device -- it's derived as Net (_100) + |Reverse (_99)| (Reverse
+                    // Total register reads negative, but the user wants its magnitude added).
+                    double netTotal = Math.Round(s.ForwardTotal, 2);
+                    double reverseTotal = Math.Round(s.ReverseTotal, 2);
+                    double forwardTotal = Math.Round(netTotal + Math.Abs(reverseTotal), 2);
+
+                    // Flow direction split: Flow >= 0 -> forward, Flow < 0 -> reverse.
+                    double forwardFlowRate = s.Flow >= 0 ? Math.Round(s.Flow, 2) : 0;
+                    double reverseFlowRate = s.Flow < 0 ? Math.Round(s.Flow, 2) : 0;
+
+                    forwardFlowDataList.Add(new DataLoggerModel { TimeStamp = ts, Value = forwardFlowRate });
+                    forwardFlowIndexList.Add(new DataLoggerModel { TimeStamp = ts, Value = forwardTotal });
+
+                    reverseFlowDataList.Add(new DataLoggerModel { TimeStamp = ts, Value = reverseFlowRate });
+                    reverseFlowIndexList.Add(new DataLoggerModel { TimeStamp = ts, Value = reverseTotal });
+
+                    forwardTotalList.Add(new DataLoggerModel { TimeStamp = ts, Value = forwardTotal });
+                    reverseTotalList.Add(new DataLoggerModel { TimeStamp = ts, Value = reverseTotal });
+                    netTotalList.Add(new DataLoggerModel { TimeStamp = ts, Value = netTotal });
+                    alarmList.Add(new DataLoggerModel { TimeStamp = ts, Value = s.Alarm });
+                }
+
+                if (logs.Count > 0)
+                {
+                    // InsertDataLogger/InsertIndexLogger upsert by TimeStamp internally, so
+                    // reprocessed/retried messages never create duplicate rows.
+                    await dataLoggerAction.InsertDataLogger(forwardFlowDataList, flowChannel);
+                    await dataLoggerAction.InsertIndexLogger(forwardFlowIndexList, flowChannel);
+
+                    await dataLoggerAction.InsertDataLogger(reverseFlowDataList, reverseFlowChannel);
+                    await dataLoggerAction.InsertIndexLogger(reverseFlowIndexList, reverseFlowChannel);
+
+                    // Data-logger-only channels (no t_Index_Logger_ for these).
+                    await dataLoggerAction.InsertDataLogger(forwardTotalList, forwardTotalChannel);
+                    await dataLoggerAction.InsertDataLogger(reverseTotalList, reverseTotalChannel);
+                    await dataLoggerAction.InsertDataLogger(netTotalList, netTotalChannel);
+                    await dataLoggerAction.InsertDataLogger(alarmList, alarmChannel);
+                }
+
+                // Logger Battery (V, modem voltage) / Signal: same JSON-top-level source as
+                // every other meter type, single "now" snapshot per message (not backfilled
+                // per history sample), same convention as Krohne's _05/_07.
+                DataLoggerModel dataLoggerBattery = new DataLoggerModel { Value = battery, TimeStamp = DateTime.Now.AddHours(8) };
+                DataLoggerModel dataSignal = new DataLoggerModel { Value = signal, TimeStamp = DateTime.Now.AddHours(8) };
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataLoggerBattery }, loggerBatteryChannel);
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataSignal }, signalChannel);
+
+                // Meter Battery Capacity: decoded MAG8000 Battery register (%), latest sample
+                // only -- same single-snapshot-per-message convention as Krohne's _06.
+                DataLoggerModel dataBatteryCapacity = new DataLoggerModel { Value = realtimeData.Battery, TimeStamp = realtimeTs };
+                await dataLoggerAction.InsertDataLogger(new List<DataLoggerModel> { dataBatteryCapacity }, batteryCapacityChannel);
+
+                var chUpdates = new List<(string channelId, DataLoggerModel value, bool isIndex)>
+                {
+                    (flowChannel, forwardFlowLast, false),
+                    (flowChannel, forwardFlowIndexLast, true),
+                    (reverseFlowChannel, reverseFlowLast, false),
+                    (reverseFlowChannel, reverseFlowIndexLast, true),
+                    (forwardTotalChannel, forwardTotalLast, false),
+                    (reverseTotalChannel, reverseTotalLast, false),
+                    (netTotalChannel, netTotalLast, false),
+                    (alarmChannel, alarmLast, false),
+                    (loggerBatteryChannel, dataLoggerBattery, false),
+                    (batteryCapacityChannel, dataBatteryCapacity, false),
+                    (signalChannel, dataSignal, false),
+                };
+
+                await channelConfigAction.BulkUpdateValues(chUpdates);
+
+                foreach (var chUpdate in chUpdates)
+                {
+                    if (!chUpdate.isIndex)
+                    {
+                        await RealtimePublisher.PublishChannelUpdateAsync(imei, chUpdate.channelId, chUpdate.value.Value, chUpdate.value.TimeStamp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await writeLogAction.WriteErrorLog(ex.Message);
+            }
+        }
+
         public async Task HandleDataKronheMeterOverTime(string stringRealTime, Dictionary<string, JsonElement> Log, DateTime time, string imei, double battery, string siteid, string location, int signal)
         {
             WriteLogAction writeLogAction = new WriteLogAction();
